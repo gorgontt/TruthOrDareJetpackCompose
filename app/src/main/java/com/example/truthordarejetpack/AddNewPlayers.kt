@@ -28,6 +28,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.rememberBottomSheetScaffoldState
@@ -42,6 +43,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -250,7 +252,7 @@ fun BottomSheetDialogContent(){
             )
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(15.dp))
 
 
         OutlinedTextField(
@@ -279,8 +281,9 @@ fun BottomSheetDialogContent(){
 
         Column(
 
-            modifier = Modifier.fillMaxWidth().fillMaxHeight(0.6f).padding(start = 30.dp),
-            verticalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxWidth().fillMaxHeight(0.6f).padding(end = 30.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.End
         ) {
 
             Card(
@@ -290,27 +293,22 @@ fun BottomSheetDialogContent(){
                         elevation = 10.dp,
                         ambientColor = Violet,
                         spotColor = Violet,
-                        shape = RoundedCornerShape(10.dp)
-                    )
+                        shape = CircleShape
+                    ).background(Gray)
 
 
             ) {
 
-                Button(
-                    modifier = Modifier.fillMaxWidth(0.9f),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Violet),
+                IconButton (
+                    modifier = Modifier.size(60.dp),
+                    colors = IconButtonDefaults.iconButtonColors(Violet),
                     onClick = {}
                 )
                 {
-                    Text(
-                        "Добавить",
-                        style = TextStyle(
-                            color = Green,
-                            fontSize = 30.sp,
-                            fontFamily = FontFamily(Font(R.font.jura_semibold))
-                        )
-                    )
+                   Icon(
+                       modifier = Modifier.fillMaxSize(0.7f),
+                       imageVector = Icons.Default.KeyboardArrowRight,contentDescription = "", tint = Green
+                   )
                 }
 
             }
