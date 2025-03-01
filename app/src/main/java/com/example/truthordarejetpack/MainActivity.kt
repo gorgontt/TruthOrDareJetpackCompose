@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.InfiniteTransition
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -82,19 +83,21 @@ class MainActivity : ComponentActivity() {
 
             // Main Screen
             composable("main_screen") {
-//                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//                    Text(text = "Main Screen", color = Color.Black, fontSize = 24.sp)
-//                }
-                ChooseVersion()
+                ChooseVersion(navController)
+            }
+
+            // Players List Screen
+            composable("players_list/{type}") { backStackEntry ->
+                val type = backStackEntry.arguments?.getString("type")
+                AddNewPlayers(type)
             }
         }
     }
 
-
     @Composable
     fun SplashScreen(navController: NavController) {
         val scale = remember {
-            androidx.compose.animation.core.Animatable(0f)
+            Animatable(0f)
         }
 
         // Animation
@@ -127,19 +130,19 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @Preview
+
     @Composable
-    fun ChooseVersion() {
-
-        Box(modifier = Modifier.background(color = Gray).fillMaxSize()) {
-
+    fun ChooseVersion(navController: NavController) {
+        Box(modifier = Modifier
+            .background(color = Gray)
+            .fillMaxSize()) {
             Column(
                 modifier = Modifier.fillMaxWidth().fillMaxHeight(0.95f),
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-
                 Text(
-                    modifier = Modifier.offset(28.dp, 28.dp).fillMaxHeight(0.15f)
+                    modifier = Modifier.offset(28.dp, 28.dp)
+                        .fillMaxHeight(0.15f)
                         .fillMaxWidth(0.7f),
                     text = "Выберите версию игры",
                     style = TextStyle(
@@ -148,9 +151,6 @@ class MainActivity : ComponentActivity() {
                         )
                     )
                 )
-
-
-
 
                 Card(
                     modifier = Modifier
@@ -169,13 +169,11 @@ class MainActivity : ComponentActivity() {
                             shape = RoundedCornerShape(0.dp, 30.dp, 30.dp, 0.dp)
                         )
                         .clickable {
-
+                            navController.navigate("players_list/пара")
                         },
                     shape = RoundedCornerShape(0.dp, 30.dp, 30.dp, 0.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-
-                    ) {
-
+                ) {
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier.fillMaxSize().background(color = Gray)
@@ -189,13 +187,7 @@ class MainActivity : ComponentActivity() {
                             )
                         )
                     }
-
-
                 }
-
-
-
-
 
                 Card(
                     modifier = Modifier
@@ -215,13 +207,11 @@ class MainActivity : ComponentActivity() {
                             shape = RoundedCornerShape(30.dp, 0.dp, 0.dp, 30.dp)
                         )
                         .clickable {
-
+                            navController.navigate("players_list/компания")
                         },
                     shape = RoundedCornerShape(30.dp, 0.dp, 0.dp, 30.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-
-                    ) {
-
+                ) {
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier.fillMaxSize().background(color = Gray)
@@ -235,15 +225,12 @@ class MainActivity : ComponentActivity() {
                             )
                         )
                     }
-
-
                 }
-
-
             }
-
-
         }
     }
+
+
 }
+
 
