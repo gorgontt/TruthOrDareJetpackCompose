@@ -57,6 +57,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+
+    implementation (libs.androidx.runtime.livedata)
     implementation ("androidx.graphics:graphics-shapes:1.0.0-rc01")
     implementation ("androidx.core:core-splashscreen:1.0.0-beta02")
     implementation ("androidx.navigation:navigation-compose:2.4.0-alpha06")
