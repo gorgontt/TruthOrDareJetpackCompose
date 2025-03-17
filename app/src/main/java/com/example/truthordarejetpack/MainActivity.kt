@@ -46,6 +46,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.truthordarejetpack.ui.theme.DarkGray
 import com.example.truthordarejetpack.ui.theme.Gray
 import com.example.truthordarejetpack.ui.theme.Green
+import com.example.truthordarejetpack.ui.theme.Red
 import com.example.truthordarejetpack.ui.theme.ShadowGreen
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.TruthOrDareJetpackTheme

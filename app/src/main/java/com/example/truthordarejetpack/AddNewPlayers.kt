@@ -3,9 +3,13 @@ package com.example.truthordarejetpack
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,12 +65,15 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.truthordarejetpack.ui.theme.DarkGray
+import com.example.truthordarejetpack.ui.theme.DarkOrange
 import com.example.truthordarejetpack.ui.theme.Gray
 import com.example.truthordarejetpack.ui.theme.Green
+import com.example.truthordarejetpack.ui.theme.LightOrange
 import com.example.truthordarejetpack.ui.theme.Orange
+import com.example.truthordarejetpack.ui.theme.ShadowGreen
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.Violet
-import kotlin.coroutines.coroutineContext
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
@@ -115,17 +122,28 @@ fun AddNewPlayers(type: String?) {
                 BottomBar(playersList)
             }
         }, content = {
-            PlayersList(playersList)
+            PlayersList(playersList) { playerName ->
+                playersList.remove(playerName) // Удаляем игрока из списка
+                savePlayers(context, playersList) // Сохраняем изменения в SharedPreferences
+            }
         }
     )
 }
 
+private fun savePlayers(context: Context, playersList: List<String>) {
+    val sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+    with(sharedPreferences.edit()) {
+        putStringSet("players", playersList.toSet())
+        apply()
+    }
+}
 
 @Composable
 fun BottomSheetDialogContent(playersList: MutableList<String>) {
 
     var text by remember { mutableStateOf("") }
 
+    val context = LocalContext.current // Получаем контекст
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -208,7 +226,7 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
                         if (text.isNotBlank()) {
                             playersList.add(text) // Добавляем нового игрока
                             text = "" // Очищаем TextField
-                            savePlayers( playersList) // Теперь это работает, т.к. функция больше не @Composable
+                            savePlayers(context, playersList = playersList) // Сохраняем изменения в SharedPreferences
                         }
                     }
                 )
@@ -229,19 +247,22 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
 
 }
 
-fun savePlayers(context: MutableList<String>) {
-
-}
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomBar(playersList: MutableList<String>) {
 
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp, bottom = 20.dp).background(
+            Transpar),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
 
         Card(
 
             modifier = Modifier
+                .background(Transpar)
                 .shadow(
                     elevation = 5.dp,
                     ambientColor = Color.Black,
@@ -255,7 +276,7 @@ fun BottomBar(playersList: MutableList<String>) {
         {
 
             Surface(
-                modifier = Modifier.background(Transpar)
+                modifier = Modifier.background(DarkGray)
 
             ) {
                 val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
@@ -263,22 +284,24 @@ fun BottomBar(playersList: MutableList<String>) {
                     mutableStateOf(false)
                 }
 
+
+
                 Button(
                     onClick = {
                         isSheetOpen = true
 
                     },
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(15.dp),
                     modifier = Modifier
-                        .size(60.dp)
+                        .size(height = 70.dp, width = 60.dp )
                         .background(Gray)
                         .innerShadow(
-                            shape = RoundedCornerShape(10.dp), color = Color.Black,
+                            shape = RoundedCornerShape(15.dp), color = Color.Black,
                             offsetY = (-0).dp, offsetX = (-0).dp
                         )
                         // Top left corner shadow.
                         .innerShadow(
-                            shape = RoundedCornerShape(10.dp), color = Color.LightGray,
+                            shape = RoundedCornerShape(15.dp), color = Color.LightGray,
                             offsetY = 2.dp, offsetX = 0.dp
                         ),
                     colors = ButtonDefaults.buttonColors(containerColor = Gray),
@@ -311,59 +334,152 @@ fun BottomBar(playersList: MutableList<String>) {
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        Button(
+        Card (
             modifier = Modifier
-                .fillMaxWidth()
+                .size(height = 70.dp, width = 500.dp)
+                .padding(0.dp)
+                .background(Transpar)
+                .shadow(
+                    elevation = 10.dp,
+                    ambientColor = LightOrange,
+                    spotColor = LightOrange,
+                    shape = RoundedCornerShape(15.dp)
+                )
                 .innerShadow(
-                    shape = RoundedCornerShape(10.dp), color = Color.Black,
+                    shape = RoundedCornerShape(15.dp), color = Color.Black,
                     offsetY = (-0).dp, offsetX = (-0).dp
                 )
                 // Top left corner shadow.
                 .innerShadow(
-                    shape = RoundedCornerShape(10.dp), color = Color.LightGray,
+                    shape = RoundedCornerShape(15.dp), color = Color.LightGray,
                     offsetY = 2.dp, offsetX = 0.dp
                 ),
-            shape = RoundedCornerShape(10.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Gray),
-            onClick = {}
-        )
-        {
+            shape = RoundedCornerShape(15.dp),
+        ) {
 
-            Text(
-                "Начать",
-                modifier = Modifier.background(Transpar),
-                style = TextStyle(
-                    color = Orange,
-                    fontSize = 35.sp,
-                    fontFamily = FontFamily(Font(R.font.jura_semibold))
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Gray)
+            ){
+
+                Button(
+                    modifier = Modifier
+                        .fillMaxHeight(0.85f).fillMaxWidth(0.95f)
+                        .innerShadow(
+                            shape = RoundedCornerShape(15.dp), color = DarkOrange,
+                            offsetY = (-4).dp, offsetX = (-4).dp
+                        )
+                        // Top left corner shadow.
+                        .innerShadow(
+                            shape = RoundedCornerShape(15.dp), color = LightOrange,
+                            offsetY = 4.dp, offsetX = 4.dp
+                        ),
+                    shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Orange),
+                    onClick = {}
                 )
-            )
+                {
+
+                    Text(
+                        "Начать",
+                        modifier = Modifier.background(Transpar),
+                        style = TextStyle(
+                            color = DarkGray,
+                            fontSize = 26.sp,
+                            fontFamily = FontFamily(Font(R.font.jura_semibold))
+                        )
+                    )
+
+
+                }
+
+            }
+
 
 
         }
+
+    }
+
+
+
 
 }
 
 
 @Composable
-fun PlayersList(playersList: MutableList<String>) {
+fun PlayersList(playersList: MutableList<String>, onPlayerDelete: (String) -> Unit) {
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
-    LazyColumn(modifier = Modifier.fillMaxHeight().fillMaxWidth().background(brush).offset(0.dp, 100.dp)) {
+    LazyColumn(
+        modifier = Modifier.fillMaxHeight().fillMaxWidth().background(brush).offset(0.dp, 120.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         items(items = playersList) { playerName ->
-            Card(modifier = Modifier.fillMaxWidth().background(brush)) {
-                Text(text = playerName)
+
+
+            Card(
+                modifier = Modifier.fillMaxWidth(0.8f).padding(start = 0.dp, end = 0.dp, top = 15.dp)
+                    .border(
+                        width = 2.dp,
+                        color = Green,
+                        shape = RoundedCornerShape(37.dp)
+
+                    )
+                    .background(Transpar)
+                    .shadow(
+                        elevation = 10.dp,
+                        ambientColor = Color.Black,
+                        spotColor = Color.Black,
+                        shape = RoundedCornerShape(37.dp)
+                    )
+
+                    .innerShadow(
+                        shape = RoundedCornerShape(40.dp, 50.dp, 37.dp, 50.dp), color = ShadowGreen,
+                        offsetY = (-8).dp, offsetX = (-6).dp
+                    )
+
+                    // Top left corner shadow.
+                    .innerShadow(
+                        shape = RoundedCornerShape(40.dp, 50.dp, 37.dp, 50.dp), color = ShadowGreen,
+                        offsetY = 8.dp, offsetX = 6.dp
+                    ),
+                shape = RoundedCornerShape(37.dp)
+            ) {
+
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize().background(Gray)
+                ) {
+
+                    Icon(
+                        modifier = Modifier.align(Alignment.CenterEnd).offset(-20.dp, 0.dp).clickable {
+                            onPlayerDelete(playerName)
+                        },
+                        painter = painterResource(R.drawable.delete_icon),
+                        contentDescription = "Delete",
+                        tint = Green
+                    )
+
+                    Text(
+                        modifier = Modifier.padding(15.dp),
+                        text = playerName,
+                        style = TextStyle(
+                            color = Green, fontSize = 28.sp, fontFamily = FontFamily(
+                                Font(R.font.jura_semibold)
+                            )
+                        )
+                    )
+                }
+
             }
         }
     }
 }
 
-private fun savePlayers(context: Context, playersList: List<String>) {
-    val context = context // Получаем контекст
-    val sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
-    val editor = sharedPreferences.edit()
-    editor.putStringSet("players", playersList.toSet())
-    editor.apply()
-}
+
+
 
 private fun loadPlayers(context: Context): Set<String> {
     val sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
