@@ -66,6 +66,7 @@ import com.example.truthordarejetpack.ui.theme.Green
 import com.example.truthordarejetpack.ui.theme.Orange
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.Violet
+import kotlin.coroutines.coroutineContext
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
@@ -207,7 +208,7 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
                         if (text.isNotBlank()) {
                             playersList.add(text) // Добавляем нового игрока
                             text = "" // Очищаем TextField
-                            //savePlayers(playersList) // Теперь это работает, т.к. функция больше не @Composable
+                            savePlayers( playersList) // Теперь это работает, т.к. функция больше не @Composable
                         }
                     }
                 )
@@ -225,6 +226,10 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
 
 
     }
+
+}
+
+fun savePlayers(context: MutableList<String>) {
 
 }
 
@@ -352,13 +357,13 @@ fun PlayersList(playersList: MutableList<String>) {
     }
 }
 
-//private fun savePlayers(playersList: List<String>) {
-//    val context = LocalContext.current // Получаем контекст
-//    val sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
-//    val editor = sharedPreferences.edit()
-//    editor.putStringSet("players", playersList.toSet())
-//    editor.apply()
-//}
+private fun savePlayers(context: Context, playersList: List<String>) {
+    val context = context // Получаем контекст
+    val sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+    editor.putStringSet("players", playersList.toSet())
+    editor.apply()
+}
 
 private fun loadPlayers(context: Context): Set<String> {
     val sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
