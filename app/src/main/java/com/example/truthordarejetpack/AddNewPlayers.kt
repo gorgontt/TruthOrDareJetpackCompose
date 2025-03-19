@@ -79,6 +79,7 @@ import com.example.truthordarejetpack.ui.theme.Violet
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
+import com.google.ai.client.generativeai.type.content
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -143,6 +144,8 @@ fun AddNewPlayers(type: String?) {
     )
 }
 
+
+
 private fun savePlayers(context: Context, playersList: List<String>) {
     val sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
     with(sharedPreferences.edit()) {
@@ -150,6 +153,8 @@ private fun savePlayers(context: Context, playersList: List<String>) {
         apply()
     }
 }
+
+
 
 @Composable
 fun BottomSheetDialogContent(playersList: MutableList<String>) {
@@ -259,6 +264,7 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
     }
 
 }
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -394,7 +400,6 @@ fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit){
 
 
 
-
 @Composable
 fun PlayersList(playersList: MutableList<String>, onPlayerDelete: (String) -> Unit) {
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
@@ -466,14 +471,22 @@ fun PlayersList(playersList: MutableList<String>, onPlayerDelete: (String) -> Un
 
 
 
+
 private fun loadPlayers(context: Context): Set<String> {
     val sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
     return sharedPreferences.getStringSet("players", emptySet()) ?: emptySet()
 }
 
+
+
 @OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
 @Composable
 fun Pager(onDismiss: () -> Unit){
+
+    val text1 = "Soft"
+    val text2 = "Hot"
+    val text3 = "Hard"
+    val text4 = "Extreme"
 
     Surface(
         modifier = Modifier.fillMaxSize().background(Gray)
@@ -481,26 +494,38 @@ fun Pager(onDismiss: () -> Unit){
         val items = ArrayList<OnBoardingData>()
         items.add(
             OnBoardingData(
-                R.drawable.truth_or_dare_splash_screen
+                R.drawable.suit_green,
+                R.drawable.splach_screen_stars_green_background,
+                R.drawable.stars_green2_background,
+                text1
 
             )
         )
 
         items.add(
             OnBoardingData(
-                R.drawable.delete_icon
+                R.drawable.suit_orange,
+                R.drawable.stars_orange_background,
+                R.drawable.stars_orange2_background,
+                text2
             )
         )
 
         items.add(
             OnBoardingData(
-                R.drawable.company_icon
+                R.drawable.suit_red,
+                R.drawable.stars_red_background,
+                R.drawable.stars_red1_background,
+                text3
             )
         )
 
         items.add(
             OnBoardingData(
-                R.drawable.couple_icon
+                R.drawable.suit_pink,
+                R.drawable.stars_pink_background,
+                R.drawable.stars_pink1_background,
+                text4
             )
         )
 
@@ -517,14 +542,10 @@ fun Pager(onDismiss: () -> Unit){
             OnBoardingPager(
                 item = items,
                 pagerState = pagerState,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().fillMaxHeight()
             )
 
         }
-
-
-
-
 
     }
 
@@ -541,13 +562,53 @@ fun OnBoardingPager(
 ){
 
     Box (
-        modifier = Modifier
+        modifier = Modifier.background(Gray).fillMaxSize()
     ){
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally) {
             HorizontalPager(state = pagerState) {page->
-                Image(
-                    painter = painterResource(id = item[page].card), contentDescription = ""
-                )
+
+                Column(modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+
+                    Image(
+                        modifier = Modifier.fillMaxWidth(),
+                        alignment = Alignment.TopStart,
+                        painter = painterResource(id = item[page].background1), contentDescription = "",
+                    )
+
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally) {
+
+                        Image(
+                            alignment = Alignment.Center,
+                            painter = painterResource(id = item[page].card), contentDescription = ""
+                        )
+
+                        Text(
+                            text = item[page].title,
+                            style = TextStyle(
+                                color = Green,
+                                fontSize = 60.sp,
+                                fontFamily = FontFamily(Font(R.font.jura_semibold))
+                            )
+                        )
+
+                    }
+
+                    Image(
+                        modifier = Modifier.fillMaxWidth(),
+                        alignment = Alignment.BottomEnd,
+                        painter = painterResource(id = item[page].background2), contentDescription = ""
+                    )
+
+
+
+                }
+
+
             }
         }
     }

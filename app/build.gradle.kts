@@ -37,6 +37,9 @@ android {
     buildFeatures {
         compose = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.4"
+    }
 }
 
 dependencies {
@@ -69,5 +72,7 @@ dependencies {
     //implementation ("io.coil-kt:coil-compose:2.3.0")
     implementation( "com.google.accompanist:accompanist-systemuicontroller:0.17.0")
     implementation( "com.google.accompanist:accompanist-pager:0.12.0")
+
+    implementation ("androidx.compose.foundation:foundation:1.4.0")
 
 }
