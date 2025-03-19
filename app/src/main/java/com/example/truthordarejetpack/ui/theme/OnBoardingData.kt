@@ -5,5 +5,5 @@ data class OnBoardingData(
     val background1: Int,
     val background2: Int,
     val title: String,
-    //val btn: String,
+    val btn: String,
 )

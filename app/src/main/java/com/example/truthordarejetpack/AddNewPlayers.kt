@@ -2,6 +2,7 @@ package com.example.truthordarejetpack
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.hardware.lights.Light
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -70,9 +71,12 @@ import com.example.truthordarejetpack.ui.theme.DarkGray
 import com.example.truthordarejetpack.ui.theme.DarkOrange
 import com.example.truthordarejetpack.ui.theme.Gray
 import com.example.truthordarejetpack.ui.theme.Green
+import com.example.truthordarejetpack.ui.theme.LightGray
 import com.example.truthordarejetpack.ui.theme.LightOrange
 import com.example.truthordarejetpack.ui.theme.OnBoardingData
 import com.example.truthordarejetpack.ui.theme.Orange
+import com.example.truthordarejetpack.ui.theme.Pink
+import com.example.truthordarejetpack.ui.theme.Red
 import com.example.truthordarejetpack.ui.theme.ShadowGreen
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.Violet
@@ -101,36 +105,49 @@ fun AddNewPlayers(type: String?) {
         modifier = Modifier.background(brush),
 
         topBar = {
-            @OptIn(ExperimentalMaterial3Api::class)
-            TopAppBar(title= { Text(
-                text = when (type) {
-                    "пара" -> "Версия пара"
-                    "компания" -> "Версия компания"
-                    else -> "Неизвестный тип"
-                },
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = 24.sp,
-                    fontFamily = FontFamily(Font(R.font.juraa))
+            if (!isPagerOpen) { // Условие для отображения topBar
+                @OptIn(ExperimentalMaterial3Api::class)
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = when (type) {
+                                "пара" -> "Версия пара"
+                                "компания" -> "Версия компания"
+                                else -> "Неизвестный тип"
+                            },
+                            style = TextStyle(
+                                color = Color.White,
+                                fontSize = 24.sp,
+                                fontFamily = FontFamily(Font(R.font.juraa))
+                            )
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { /* Handle back navigation */ }) {
+                            Icon(painter = painterResource(id = R.drawable.arrow_back), contentDescription = "Меню")
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Transpar,
+                        titleContentColor = Color.Black,
+                        navigationIconContentColor = Color.White,
+                        actionIconContentColor = Color.LightGray
+                    )
                 )
-
-            )},
-                navigationIcon={ IconButton({ }) { Icon(painter = painterResource(id = R.drawable.arrow_back), contentDescription = "Меню")}},
-
-                colors= TopAppBarDefaults.topAppBarColors(containerColor = Transpar,
-                    titleContentColor = Color.Black,
-                    navigationIconContentColor = Color.White,
-                    actionIconContentColor = Color.LightGray))
+            }
         },
 
         bottomBar = {
-            BottomAppBar(
-                containerColor = Transpar,
-                contentColor = Transpar
-            ){
-                BottomBar(playersList, onPagerOpen = { isPagerOpen = true })
+            if (!isPagerOpen) { // Условие для отображения bottomBar
+                BottomAppBar(
+                    containerColor = Transpar,
+                    contentColor = Transpar
+                ) {
+                    BottomBar(playersList, onPagerOpen = { isPagerOpen = true })
+                }
             }
-        }, content = {
+        },
+        content = {
             PlayersList(playersList) { playerName ->
                 playersList.remove(playerName)
                 savePlayers(context, playersList)
@@ -272,7 +289,9 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
 fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit){
 
     Row(
-        modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
             .background(
                 Transpar
             ),
@@ -359,7 +378,8 @@ fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit){
             modifier = Modifier
                 .size(height = 70.dp, width = 500.dp)
                 .padding(0.dp)
-                .fillMaxHeight(0.85f).fillMaxWidth(0.95f)
+                .fillMaxHeight(0.85f)
+                .fillMaxWidth(0.95f)
                 .shadow(
                     elevation = 10.dp,
                     ambientColor = Orange,
@@ -404,14 +424,20 @@ fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit){
 fun PlayersList(playersList: MutableList<String>, onPlayerDelete: (String) -> Unit) {
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
     LazyColumn(
-        modifier = Modifier.fillMaxHeight().fillMaxWidth().background(brush).offset(0.dp, 120.dp),
+        modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()
+            .background(brush)
+            .offset(0.dp, 120.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(items = playersList) { playerName ->
 
 
             Card(
-                modifier = Modifier.fillMaxWidth(0.8f).padding(start = 0.dp, end = 0.dp, top = 15.dp)
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .padding(start = 0.dp, end = 0.dp, top = 15.dp)
                     .border(
                         width = 2.dp,
                         color = Green,
@@ -441,13 +467,18 @@ fun PlayersList(playersList: MutableList<String>, onPlayerDelete: (String) -> Un
 
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize().background(Gray)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Gray)
                 ) {
 
                     Icon(
-                        modifier = Modifier.align(Alignment.CenterEnd).offset(-20.dp, 0.dp).clickable {
-                            onPlayerDelete(playerName)
-                        },
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .offset(-20.dp, 0.dp)
+                            .clickable {
+                                onPlayerDelete(playerName)
+                            },
                         painter = painterResource(R.drawable.delete_icon),
                         contentDescription = "Delete",
                         tint = Green
@@ -488,8 +519,14 @@ fun Pager(onDismiss: () -> Unit){
     val text3 = "Hard"
     val text4 = "Extreme"
 
+    val btnText = "Начать"
+
+    val colors = listOf(Green, Orange, Red, Pink)
+
     Surface(
-        modifier = Modifier.fillMaxSize().background(Gray)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Gray)
     ) {
         val items = ArrayList<OnBoardingData>()
         items.add(
@@ -497,7 +534,8 @@ fun Pager(onDismiss: () -> Unit){
                 R.drawable.suit_green,
                 R.drawable.splach_screen_stars_green_background,
                 R.drawable.stars_green2_background,
-                text1
+                text1,
+                btnText
 
             )
         )
@@ -507,7 +545,8 @@ fun Pager(onDismiss: () -> Unit){
                 R.drawable.suit_orange,
                 R.drawable.stars_orange_background,
                 R.drawable.stars_orange2_background,
-                text2
+                text2,
+                btnText
             )
         )
 
@@ -516,7 +555,8 @@ fun Pager(onDismiss: () -> Unit){
                 R.drawable.suit_red,
                 R.drawable.stars_red_background,
                 R.drawable.stars_red1_background,
-                text3
+                text3,
+                btnText
             )
         )
 
@@ -525,11 +565,14 @@ fun Pager(onDismiss: () -> Unit){
                 R.drawable.suit_pink,
                 R.drawable.stars_pink_background,
                 R.drawable.stars_pink1_background,
-                text4
+                text4,
+                btnText
             )
         )
 
-        Box(modifier = Modifier.fillMaxSize().background(Gray),
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Gray),
             contentAlignment = Alignment.Center){
 
             val pagerState = com.google.accompanist.pager.rememberPagerState(
@@ -542,7 +585,10 @@ fun Pager(onDismiss: () -> Unit){
             OnBoardingPager(
                 item = items,
                 pagerState = pagerState,
-                modifier = Modifier.fillMaxWidth().fillMaxHeight()
+                colors = colors,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
             )
 
         }
@@ -558,11 +604,14 @@ fun Pager(onDismiss: () -> Unit){
 fun OnBoardingPager(
     item: List<OnBoardingData>,
     pagerState: PagerState,
+    colors: List<Color>,
     modifier: Modifier = Modifier
 ){
 
     Box (
-        modifier = Modifier.background(Gray).fillMaxSize()
+        modifier = Modifier
+            .background(Gray)
+            .fillMaxSize()
     ){
         Column(modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally) {
@@ -572,11 +621,17 @@ fun OnBoardingPager(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally) {
 
-                    Image(
-                        modifier = Modifier.fillMaxWidth(),
-                        alignment = Alignment.TopStart,
-                        painter = painterResource(id = item[page].background1), contentDescription = "",
-                    )
+                    Column(
+                        modifier = Modifier.background(Transpar).fillMaxWidth(),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Image(
+                            modifier = Modifier.fillMaxWidth(0.7f),
+                            painter = painterResource(id = item[page].background1),
+                            contentDescription = null,
+
+                            )
+                    }
 
                     Column(
                         verticalArrangement = Arrangement.Center,
@@ -590,21 +645,60 @@ fun OnBoardingPager(
                         Text(
                             text = item[page].title,
                             style = TextStyle(
-                                color = Green,
+                                color = colors[page],
                                 fontSize = 60.sp,
                                 fontFamily = FontFamily(Font(R.font.jura_semibold))
                             )
                         )
 
+                        Spacer(modifier = Modifier.height(30.dp))
+
+                        Button(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .fillMaxWidth(0.7f)
+                                .padding(0.dp)
+                                .innerShadow(
+                                    shape = RoundedCornerShape(18.dp), color = DarkGray,
+                                    offsetY = (-4).dp, offsetX = (-4).dp
+                                )
+                                // Top left corner shadow.
+                                .innerShadow(
+                                    shape = RoundedCornerShape(18.dp), color = LightGray,
+                                    offsetY = 4.dp, offsetX = 4.dp
+                                ),
+                            shape = RoundedCornerShape(18.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Gray),
+                            onClick = {}
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(10.dp),
+                                text = item[page].btn,
+                                style = TextStyle(
+                                    color = colors[page],
+                                    fontSize = 36.sp,
+                                    fontFamily = FontFamily(Font(R.font.jura_semibold))
+                                )
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(50.dp))
+
                     }
 
-                    Image(
-                        modifier = Modifier.fillMaxWidth(),
-                        alignment = Alignment.BottomEnd,
-                        painter = painterResource(id = item[page].background2), contentDescription = ""
-                    )
+                    Column(
+                        modifier = Modifier.background(Transpar).fillMaxWidth(),
+                        horizontalAlignment = Alignment.End
+                    ) {
 
+                        Image(
+                            modifier = Modifier.fillMaxWidth(0.7f),
+                            painter = painterResource(id = item[page].background2),
+                            contentDescription = null,
 
+                            )
+
+                    }
 
                 }
 
