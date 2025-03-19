@@ -2,6 +2,8 @@ package com.example.truthordarejetpack
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -69,14 +71,18 @@ import com.example.truthordarejetpack.ui.theme.DarkOrange
 import com.example.truthordarejetpack.ui.theme.Gray
 import com.example.truthordarejetpack.ui.theme.Green
 import com.example.truthordarejetpack.ui.theme.LightOrange
+import com.example.truthordarejetpack.ui.theme.OnBoardingData
 import com.example.truthordarejetpack.ui.theme.Orange
 import com.example.truthordarejetpack.ui.theme.ShadowGreen
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.Violet
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class,ExperimentalFoundationApi::class)
 @Composable
 fun AddNewPlayers(type: String?) {
 
@@ -85,6 +91,8 @@ fun AddNewPlayers(type: String?) {
 
     val savedPlayers = loadPlayers(context) // Передаем контекст
     val playersList = remember { mutableStateListOf(*savedPlayers.toTypedArray()) }
+
+    var isPagerOpen by remember { mutableStateOf(false) } // Переносим сюда состояние
 
 
 
@@ -108,7 +116,7 @@ fun AddNewPlayers(type: String?) {
             )},
                 navigationIcon={ IconButton({ }) { Icon(painter = painterResource(id = R.drawable.arrow_back), contentDescription = "Меню")}},
 
-                colors= TopAppBarDefaults.topAppBarColors(containerColor = Gray,
+                colors= TopAppBarDefaults.topAppBarColors(containerColor = Transpar,
                     titleContentColor = Color.Black,
                     navigationIconContentColor = Color.White,
                     actionIconContentColor = Color.LightGray))
@@ -119,12 +127,17 @@ fun AddNewPlayers(type: String?) {
                 containerColor = Transpar,
                 contentColor = Transpar
             ){
-                BottomBar(playersList)
+                BottomBar(playersList, onPagerOpen = { isPagerOpen = true })
             }
         }, content = {
             PlayersList(playersList) { playerName ->
-                playersList.remove(playerName) // Удаляем игрока из списка
-                savePlayers(context, playersList) // Сохраняем изменения в SharedPreferences
+                playersList.remove(playerName)
+                savePlayers(context, playersList)
+            }
+
+            // Здесь добавляем проверку для отображения Pager
+            if (isPagerOpen) {
+                Pager(onDismiss = { isPagerOpen = false }) // Метод для закрытия Pager
             }
         }
     )
@@ -250,11 +263,13 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomBar(playersList: MutableList<String>) {
+fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit){
 
     Row(
-        modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp, bottom = 20.dp).background(
-            Transpar),
+        modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+            .background(
+                Transpar
+            ),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -293,7 +308,7 @@ fun BottomBar(playersList: MutableList<String>) {
                     },
                     shape = RoundedCornerShape(15.dp),
                     modifier = Modifier
-                        .size(height = 70.dp, width = 60.dp )
+                        .size(height = 70.dp, width = 60.dp)
                         .background(Gray)
                         .innerShadow(
                             shape = RoundedCornerShape(15.dp), color = Color.Black,
@@ -334,79 +349,50 @@ fun BottomBar(playersList: MutableList<String>) {
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        Card (
+        Button(
             modifier = Modifier
                 .size(height = 70.dp, width = 500.dp)
                 .padding(0.dp)
-                .background(Transpar)
+                .fillMaxHeight(0.85f).fillMaxWidth(0.95f)
                 .shadow(
                     elevation = 10.dp,
-                    ambientColor = LightOrange,
-                    spotColor = LightOrange,
+                    ambientColor = Orange,
+                    spotColor = Orange,
                     shape = RoundedCornerShape(15.dp)
                 )
                 .innerShadow(
-                    shape = RoundedCornerShape(15.dp), color = Color.Black,
-                    offsetY = (-0).dp, offsetX = (-0).dp
+                    shape = RoundedCornerShape(15.dp), color = DarkOrange,
+                    offsetY = (-4).dp, offsetX = (-4).dp
                 )
                 // Top left corner shadow.
                 .innerShadow(
-                    shape = RoundedCornerShape(15.dp), color = Color.LightGray,
-                    offsetY = 2.dp, offsetX = 0.dp
+                    shape = RoundedCornerShape(15.dp), color = LightOrange,
+                    offsetY = 4.dp, offsetX = 4.dp
                 ),
             shape = RoundedCornerShape(15.dp),
-        ) {
+            colors = ButtonDefaults.buttonColors(containerColor = Orange),
+            onClick = onPagerOpen, // Теперь мы используем переданный колбек
+        )
+        {
 
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Gray)
-            ){
-
-                Button(
-                    modifier = Modifier
-                        .fillMaxHeight(0.85f).fillMaxWidth(0.95f)
-                        .innerShadow(
-                            shape = RoundedCornerShape(15.dp), color = DarkOrange,
-                            offsetY = (-4).dp, offsetX = (-4).dp
-                        )
-                        // Top left corner shadow.
-                        .innerShadow(
-                            shape = RoundedCornerShape(15.dp), color = LightOrange,
-                            offsetY = 4.dp, offsetX = 4.dp
-                        ),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Orange),
-                    onClick = {}
+            Text(
+                "Начать",
+                modifier = Modifier.background(Transpar),
+                style = TextStyle(
+                    color = DarkGray,
+                    fontSize = 26.sp,
+                    fontFamily = FontFamily(Font(R.font.jura_semibold))
                 )
-                {
-
-                    Text(
-                        "Начать",
-                        modifier = Modifier.background(Transpar),
-                        style = TextStyle(
-                            color = DarkGray,
-                            fontSize = 26.sp,
-                            fontFamily = FontFamily(Font(R.font.jura_semibold))
-                        )
-                    )
-
-
-                }
-
-            }
-
+            )
 
 
         }
 
+
     }
-
-
-
-
 }
+
+
 
 
 @Composable
@@ -480,15 +466,92 @@ fun PlayersList(playersList: MutableList<String>, onPlayerDelete: (String) -> Un
 
 
 
-
 private fun loadPlayers(context: Context): Set<String> {
     val sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
     return sharedPreferences.getStringSet("players", emptySet()) ?: emptySet()
 }
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
+@Composable
+fun Pager(onDismiss: () -> Unit){
+
+    Surface(
+        modifier = Modifier.fillMaxSize().background(Gray)
+    ) {
+        val items = ArrayList<OnBoardingData>()
+        items.add(
+            OnBoardingData(
+                R.drawable.truth_or_dare_splash_screen
+
+            )
+        )
+
+        items.add(
+            OnBoardingData(
+                R.drawable.delete_icon
+            )
+        )
+
+        items.add(
+            OnBoardingData(
+                R.drawable.company_icon
+            )
+        )
+
+        items.add(
+            OnBoardingData(
+                R.drawable.couple_icon
+            )
+        )
+
+        Box(modifier = Modifier.fillMaxSize().background(Gray),
+            contentAlignment = Alignment.Center){
+
+            val pagerState = com.google.accompanist.pager.rememberPagerState(
+                pageCount = items.size,
+                initialOffscreenLimit = 2,
+                infiniteLoop = false,
+                initialPage = 0
+            )
+
+            OnBoardingPager(
+                item = items,
+                pagerState = pagerState,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+        }
 
 
 
+
+
+    }
+
+}
+
+
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun OnBoardingPager(
+    item: List<OnBoardingData>,
+    pagerState: PagerState,
+    modifier: Modifier = Modifier
+){
+
+    Box (
+        modifier = Modifier
+    ){
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            HorizontalPager(state = pagerState) {page->
+                Image(
+                    painter = painterResource(id = item[page].card), contentDescription = ""
+                )
+            }
+        }
+    }
+}
 
             
 

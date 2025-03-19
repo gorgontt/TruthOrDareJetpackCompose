@@ -66,5 +66,8 @@ dependencies {
 
     implementation ("androidx.compose.ui:ui:1.2.0-beta02")
     implementation ("androidx.compose.material:material:1.2.0-beta02")
+    //implementation ("io.coil-kt:coil-compose:2.3.0")
+    implementation( "com.google.accompanist:accompanist-systemuicontroller:0.17.0")
+    implementation( "com.google.accompanist:accompanist-pager:0.12.0")
 
 }
