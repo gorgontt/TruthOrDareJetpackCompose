@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -188,14 +189,20 @@ fun OnBoardingPager(
                                 .align(Alignment.CenterHorizontally)
                                 .fillMaxWidth(0.7f)
                                 .padding(0.dp)
+                                .shadow(
+                                    elevation = 5.dp,
+                                    ambientColor = Color.Black,
+                                    spotColor = Color.Black,
+                                    shape = RoundedCornerShape(15.dp)
+                                )
                                 .innerShadow(
                                     shape = RoundedCornerShape(18.dp), color = DarkGray,
-                                    offsetY = (-4).dp, offsetX = (-4).dp
+                                    offsetY = (-1).dp, offsetX = (-1).dp
                                 )
                                 // Top left corner shadow.
                                 .innerShadow(
                                     shape = RoundedCornerShape(18.dp), color = LightGray,
-                                    offsetY = 4.dp, offsetX = 4.dp
+                                    offsetY = 4.dp, offsetX = 1.dp
                                 ),
                             shape = RoundedCornerShape(18.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Gray),
