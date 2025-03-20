@@ -68,6 +68,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.truthordarejetpack.ui.theme.DarkGray
+import com.example.truthordarejetpack.ui.theme.DarkGreen
 import com.example.truthordarejetpack.ui.theme.DarkOrange
 import com.example.truthordarejetpack.ui.theme.Gray
 import com.example.truthordarejetpack.ui.theme.Green
@@ -155,7 +156,7 @@ fun AddNewPlayers(type: String?) {
 
             // Здесь добавляем проверку для отображения Pager
             if (isPagerOpen) {
-                Pager(onDismiss = { isPagerOpen = false }) // Метод для закрытия Pager
+                Pager(playersList, onDismiss = { isPagerOpen = false }) // Метод для закрытия Pager
             }
         }
     )
@@ -181,15 +182,16 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
     val context = LocalContext.current // Получаем контекст
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(Transpar)
+
 
     ) {
 
         Text(
-            modifier = Modifier.padding(start = 30.dp, top = 10.dp),
+            modifier = Modifier.padding(start = 40.dp, top = 10.dp),
             text = "Имя игрока",
             style = TextStyle(
-                color = Color.White,
+                color = Color.LightGray,
                 fontSize = 20.sp,
                 fontFamily = FontFamily(Font(R.font.juraa))
             )
@@ -201,31 +203,50 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
         OutlinedTextField(
 
             modifier = Modifier
+                .background(Transpar)
                 .fillMaxWidth()
-                .padding(start = 30.dp, end = 30.dp),
+                .padding(start = 30.dp, end = 30.dp)
+                .border(
+                    width = 2.dp,
+                    color = Green,
+                    shape = RoundedCornerShape(37.dp)
+                )
+                .shadow(elevation = 10.dp,
+                    ambientColor = Color.Black,
+                    spotColor = Color.Black,
+                    shape = RoundedCornerShape(37.dp))
+                .innerShadow(
+                    shape = RoundedCornerShape(40.dp, 50.dp, 37.dp, 50.dp), color = ShadowGreen,
+                    offsetY = (-8).dp, offsetX = (-6).dp
+                )
+                .innerShadow(
+                    shape = RoundedCornerShape(40.dp, 50.dp, 37.dp, 50.dp), color = ShadowGreen,
+                    offsetY = 8.dp, offsetX = 6.dp
+                ),
+
             value = text,
             onValueChange = { text = it },
-
             leadingIcon = {
                 Icon(
-                    imageVector = Icons.Default.Person,
+                    modifier = Modifier.padding(start = 5.dp),
+                    painter = painterResource(R.drawable.user_icon),
                     contentDescription = "",
-                    tint = Color.White
+                    tint = DarkGreen
                 )
             },
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
 
             textStyle = TextStyle(
-                color = Color.White,
+                color = Green,
                 fontSize = 24.sp,
-                fontFamily = FontFamily(Font(R.font.juraa))
+                fontFamily = FontFamily(Font(R.font.jura_semibold))
             ),
 
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Violet,
-                unfocusedBorderColor = Color.White
+                focusedBorderColor = Green,
+                unfocusedBorderColor = Green
             ),
-            shape = RoundedCornerShape(14.dp)
+            shape = RoundedCornerShape(37.dp)
 
         )
 
@@ -240,40 +261,43 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
             horizontalAlignment = Alignment.End
         ) {
 
-            Card(
-
+            Button (
                 modifier = Modifier
                     .shadow(
-                        elevation = 10.dp,
-                        ambientColor = Violet,
-                        spotColor = Violet,
-                        shape = CircleShape
+                        elevation = 5.dp,
+                        ambientColor = Color.Black,
+                        spotColor = Color.Black,
+                        shape = RoundedCornerShape(18.dp)
                     )
-                    .background(Gray)
-
-
-            ) {
-
-                IconButton(
-                    modifier = Modifier.size(60.dp),
-                    colors = IconButtonDefaults.iconButtonColors(Violet),
-                    onClick = {
-                        if (text.isNotBlank()) {
-                            playersList.add(text) // Добавляем нового игрока
-                            text = "" // Очищаем TextField
-                            savePlayers(context, playersList = playersList) // Сохраняем изменения в SharedPreferences
-                        }
+                    .innerShadow(
+                        shape = RoundedCornerShape(18.dp), color = Transpar,
+                        offsetY = (-1).dp, offsetX = (-1).dp
+                    )
+                    // Top left corner shadow.
+                    .innerShadow(
+                        shape = RoundedCornerShape(18.dp), color = LightGray,
+                        offsetY = 4.dp, offsetX = 1.dp
+                    ),
+                shape = RoundedCornerShape(18.dp),
+                colors = ButtonDefaults.buttonColors(Gray),
+                onClick = {
+                    if (text.isNotBlank()) {
+                        playersList.add(text) // Добавляем нового игрока
+                        text = "" // Очищаем TextField
+                        savePlayers(context, playersList = playersList) // Сохраняем изменения в SharedPreferences
                     }
-                )
-                {
-                    Icon(
-                        modifier = Modifier.fillMaxSize(0.7f),
-                        imageVector = Icons.Default.KeyboardArrowRight,
-                        contentDescription = "",
-                        tint = Green
-                    )
                 }
-
+            )
+            {
+                Text(
+                    modifier = Modifier.padding(top = 5.dp, bottom = 5.dp),
+                    text = "Ok",
+                    style = TextStyle(
+                        color = Violet,
+                        fontSize = 30.sp,
+                        fontFamily = FontFamily(Font(R.font.jura_semibold))
+                    )
+                )
             }
         }
 
@@ -287,6 +311,8 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit){
+
+    val brush = Brush.linearGradient(listOf(Gray, DarkGray))
 
     Row(
         modifier = Modifier
