@@ -26,6 +26,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +47,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.truthordarejetpack.ui.theme.DarkGray
 import com.example.truthordarejetpack.ui.theme.Gray
 import com.example.truthordarejetpack.ui.theme.Green
-import com.example.truthordarejetpack.ui.theme.Red
 import com.example.truthordarejetpack.ui.theme.ShadowGreen
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.TruthOrDareJetpackTheme
@@ -73,26 +73,27 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun Navigation() {
         val navController = rememberNavController()
+        val playersList = remember { mutableStateListOf<String>() }
+        val onDismiss: () -> Unit = { /* Действие при закрытии */ }
+
         NavHost(
             navController = navController,
             startDestination = "splash_screen"
         ) {
-            composable("splash_screen") {
-                SplashScreen(navController = navController)
-            }
-
-            // Main Screen
-            composable("main_screen") {
-                ChooseVersion(navController)
-            }
+            composable(Routes.SplashScreen.route) { SplashScreen(navController) }
+            composable(Routes.ChooseVersion.route) { ChooseVersion(navController) }
 
             // Players List Screen
             composable("players_list/{type}") { backStackEntry ->
                 val type = backStackEntry.arguments?.getString("type")
-                AddNewPlayers(type)
+                AddNewPlayers(type, navController, playersList) // Передаем playersList сюда
             }
+
+            composable(Routes.Pager.route) { Pager(playersList, onDismiss, navController) }
+            composable(Routes.ChooseTruthorDare.route) { ChooseTruthOrDare(playersList, onDismiss, navController) }
         }
     }
+
 
 
     @Composable

@@ -2,9 +2,7 @@ package com.example.truthordarejetpack
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.hardware.lights.Light
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,16 +22,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -41,7 +35,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -54,6 +47,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -67,6 +61,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.truthordarejetpack.ui.theme.DarkGray
 import com.example.truthordarejetpack.ui.theme.DarkGreen
 import com.example.truthordarejetpack.ui.theme.DarkOrange
@@ -74,26 +69,25 @@ import com.example.truthordarejetpack.ui.theme.Gray
 import com.example.truthordarejetpack.ui.theme.Green
 import com.example.truthordarejetpack.ui.theme.LightGray
 import com.example.truthordarejetpack.ui.theme.LightOrange
-import com.example.truthordarejetpack.ui.theme.OnBoardingData
 import com.example.truthordarejetpack.ui.theme.Orange
-import com.example.truthordarejetpack.ui.theme.Pink
-import com.example.truthordarejetpack.ui.theme.Red
 import com.example.truthordarejetpack.ui.theme.ShadowGreen
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.Violet
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.ai.client.generativeai.type.content
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class,ExperimentalFoundationApi::class)
 @Composable
-fun AddNewPlayers(type: String?) {
+fun AddNewPlayers(
+    type: String?,
+    navController: NavController,
+    playersList: SnapshotStateList<String>
+) {
 
     val context = LocalContext.current // Получаем контекст
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
+
+
 
     val savedPlayers = loadPlayers(context) // Передаем контекст
     val playersList = remember { mutableStateListOf(*savedPlayers.toTypedArray()) }
@@ -124,7 +118,7 @@ fun AddNewPlayers(type: String?) {
                         )
                     },
                     navigationIcon = {
-                        IconButton(onClick = { /* Handle back navigation */ }) {
+                        IconButton(onClick = { navController.navigate("main_screen") }) {
                             Icon(painter = painterResource(id = R.drawable.arrow_back), contentDescription = "Меню")
                         }
                     },
@@ -139,12 +133,12 @@ fun AddNewPlayers(type: String?) {
         },
 
         bottomBar = {
-            if (!isPagerOpen) { // Условие для отображения bottomBar
+            if (!isPagerOpen) {
                 BottomAppBar(
                     containerColor = Transpar,
                     contentColor = Transpar
                 ) {
-                    BottomBar(playersList, onPagerOpen = { isPagerOpen = true })
+                    BottomBar(playersList, onPagerOpen = { isPagerOpen = true }, navController)
                 }
             }
         },
@@ -156,7 +150,7 @@ fun AddNewPlayers(type: String?) {
 
             // Здесь добавляем проверку для отображения Pager
             if (isPagerOpen) {
-                Pager(playersList, onDismiss = { isPagerOpen = false }) // Метод для закрытия Pager
+                Pager(playersList, onDismiss = { isPagerOpen = false }, navController) // Метод для закрытия Pager
             }
         }
     )
@@ -310,7 +304,7 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit){
+fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit, navController: NavController){
 
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
 
@@ -423,7 +417,8 @@ fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit){
                 ),
             shape = RoundedCornerShape(15.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Orange),
-            onClick = onPagerOpen, // Теперь мы используем переданный колбек
+            onClick = {navController.navigate(Routes.Pager.route)}
+            //onClick = onPagerOpen, // Теперь мы используем переданный колбек
         )
         {
 
