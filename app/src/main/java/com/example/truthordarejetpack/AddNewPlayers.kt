@@ -89,7 +89,7 @@ fun AddNewPlayers(
 
 
 
-    val savedPlayers = loadPlayers(context) // Передаем контекст
+        //val savedPlayers = loadPlayers(context).toMutableList()
    // val playersList = remember { mutableStateListOf(*savedPlayers.toTypedArray()) }
 
     var isPagerOpen by remember { mutableStateOf(false) } // Переносим сюда состояние
@@ -524,10 +524,11 @@ fun PlayersList(playersList: MutableList<String>, onPlayerDelete: (String) -> Un
 
 
 
-private fun loadPlayers(context: Context): Set<String> {
+fun loadPlayers(context: Context): Set<String> {
     val sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
     return sharedPreferences.getStringSet("players", emptySet()) ?: emptySet()
 }
+
 
 
 

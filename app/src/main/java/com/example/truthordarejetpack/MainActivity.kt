@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -74,7 +75,10 @@ class MainActivity : ComponentActivity() {
     fun Navigation() {
         val navController = rememberNavController()
         // Инициализация playersList как mutableStateListOf для отслеживания изменений списка
-        val playersList = remember { mutableStateListOf<String>() }
+        val context = LocalContext.current
+        val savedPlayers = loadPlayers(context).toMutableList() // Загружаем сохраненные имена игроков
+        val playersList = remember { mutableStateListOf(*savedPlayers.toTypedArray()) }
+
         val onDismiss: () -> Unit = { /* Действие при закрытии */ }
 
         NavHost(
