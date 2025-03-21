@@ -45,15 +45,15 @@ import com.example.truthordarejetpack.ui.theme.Violet
 import kotlin.random.Random
 
 @Composable
-fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navController: NavController){
-
+fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navController: NavController) {
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
 
     val randomTruthQuestion = remember { CoupleSoftTruthList.random() }
 
-
+    // Выбор случайного имени игрока
     val randomPlayerName = if (playersList.isNotEmpty()) {
-        playersList[Random.nextInt(playersList.size)]
+        val randomIndex = remember { Random.nextInt(playersList.size) }
+        playersList[randomIndex]
     } else {
         "Нет игроков"
     }

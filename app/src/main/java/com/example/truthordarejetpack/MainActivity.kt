@@ -73,6 +73,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun Navigation() {
         val navController = rememberNavController()
+        // Инициализация playersList как mutableStateListOf для отслеживания изменений списка
         val playersList = remember { mutableStateListOf<String>() }
         val onDismiss: () -> Unit = { /* Действие при закрытии */ }
 
@@ -86,11 +87,15 @@ class MainActivity : ComponentActivity() {
             // Players List Screen
             composable("players_list/{type}") { backStackEntry ->
                 val type = backStackEntry.arguments?.getString("type")
-                AddNewPlayers(type, navController, playersList) // Передаем playersList сюда
+                AddNewPlayers(type, navController, playersList) // Теперь playersList обновляется здесь
             }
 
-            composable(Routes.Pager.route) { Pager(playersList, onDismiss, navController) }
-            composable(Routes.ChooseTruthorDare.route) { ChooseTruthOrDare(playersList, onDismiss, navController) }
+            composable(Routes.Pager.route) {
+                Pager(playersList, onDismiss, navController)
+            }
+            composable(Routes.ChooseTruthorDare.route) {
+                ChooseTruthOrDare(playersList.toList(), onDismiss, navController) // Передавайте playersList как List
+            }
         }
     }
 

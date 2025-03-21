@@ -90,7 +90,7 @@ fun AddNewPlayers(
 
 
     val savedPlayers = loadPlayers(context) // Передаем контекст
-    val playersList = remember { mutableStateListOf(*savedPlayers.toTypedArray()) }
+   // val playersList = remember { mutableStateListOf(*savedPlayers.toTypedArray()) }
 
     var isPagerOpen by remember { mutableStateOf(false) } // Переносим сюда состояние
 
@@ -100,7 +100,7 @@ fun AddNewPlayers(
         modifier = Modifier.background(brush),
 
         topBar = {
-            if (!isPagerOpen) { // Условие для отображения topBar
+            if (!isPagerOpen) {
                 @OptIn(ExperimentalMaterial3Api::class)
                 TopAppBar(
                     title = {
