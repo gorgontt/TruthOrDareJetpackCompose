@@ -25,9 +25,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -45,6 +47,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -73,6 +76,7 @@ import com.example.truthordarejetpack.ui.theme.Orange
 import com.example.truthordarejetpack.ui.theme.ShadowGreen
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.Violet
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -84,15 +88,10 @@ fun AddNewPlayers(
     playersList: SnapshotStateList<String>
 ) {
 
-    val context = LocalContext.current // Получаем контекст
+    val context = LocalContext.current
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
 
-
-
-        //val savedPlayers = loadPlayers(context).toMutableList()
-   // val playersList = remember { mutableStateListOf(*savedPlayers.toTypedArray()) }
-
-    var isPagerOpen by remember { mutableStateOf(false) } // Переносим сюда состояние
+    var isPagerOpen by remember { mutableStateOf(false) }
 
 
 
@@ -168,12 +167,14 @@ private fun savePlayers(context: Context, playersList: List<String>) {
 
 
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
-fun BottomSheetDialogContent(playersList: MutableList<String>) {
+fun BottomSheetDialogContent(playersList: MutableList<String>, onDismiss: () -> Unit) {
 
     var text by remember { mutableStateOf("") }
 
-    val context = LocalContext.current // Получаем контекст
+    val context = LocalContext.current
+
 
     Column(
         modifier = Modifier.fillMaxSize().background(Transpar)
@@ -244,7 +245,6 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
 
         )
 
-
         Column(
 
             modifier = Modifier
@@ -254,6 +254,7 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.End
         ) {
+
 
             Button (
                 modifier = Modifier
@@ -277,9 +278,12 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
                 onClick = {
                     if (text.isNotBlank()) {
                         playersList.add(text) // Добавляем нового игрока
-                        text = "" // Очищаем TextField
+                        text = ""
                         savePlayers(context, playersList = playersList) // Сохраняем изменения в SharedPreferences
                     }
+
+                    onDismiss()
+
                 }
             )
             {
@@ -298,7 +302,11 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
 
     }
 
+
+
 }
+
+
 
 
 
@@ -306,7 +314,8 @@ fun BottomSheetDialogContent(playersList: MutableList<String>) {
 @Composable
 fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit, navController: NavController){
 
-    val brush = Brush.linearGradient(listOf(Gray, DarkGray))
+    val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
+    var isSheetOpen by remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier
@@ -382,7 +391,9 @@ fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit, navCont
                         sheetState = sheetState,
                         onDismissRequest = { isSheetOpen = false }
                     ) {
-                        BottomSheetDialogContent(playersList) // Передача playersList
+                        BottomSheetDialogContent(playersList) {
+                            isSheetOpen = false
+                        }
                     }
                 }
 
