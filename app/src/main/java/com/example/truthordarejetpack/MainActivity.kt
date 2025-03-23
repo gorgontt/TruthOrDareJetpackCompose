@@ -74,7 +74,6 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun Navigation() {
         val navController = rememberNavController()
-        // Инициализация playersList как mutableStateListOf для отслеживания изменений списка
         val context = LocalContext.current
         val savedPlayers = loadPlayers(context).toMutableList() // Загружаем сохраненные имена игроков
         val playersList = remember { mutableStateListOf(*savedPlayers.toTypedArray()) }
@@ -99,6 +98,9 @@ class MainActivity : ComponentActivity() {
             }
             composable(Routes.ChooseTruthorDare.route) {
                 ChooseTruthOrDare(playersList.toList(), onDismiss, navController) // Передавайте playersList как List
+            }
+            composable(Routes.Question.route) {
+                Question(navController)
             }
         }
     }
@@ -317,8 +319,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-
 
 
 }

@@ -238,7 +238,10 @@ fun OnBoardingPager(
                                     ),
                                 shape = RoundedCornerShape(18.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = Gray),
-                                onClick = {navController.navigate(Routes.ChooseTruthorDare.route)} //{ showTruthOrDare = true } //navController.navigate("players_list/пара")
+                                onClick = {
+                                    if (page == 0) { // Assuming 0 is the "Soft" page
+                                    navController.navigate(Routes.ChooseTruthorDare.route)
+                                }} //{ showTruthOrDare = true } //navController.navigate("players_list/пара")
                             ) {
                                 Text(
                                     modifier = Modifier
@@ -283,21 +286,6 @@ fun OnBoardingPager(
 
 
 
-
-//@Composable
-//fun Navigation1(){
-//
-//    val navController = rememberNavController()
-//    val playersList = listOf("Player1", "Player2") // Пример списка игроков
-//    val onDismiss: () -> Unit = { /* Действие при закрытии */ }
-//
-//    NavHost(navController = navController, startDestination = Routes.Pager.route) {
-//
-//        composable(Routes.Pager.route) { Pager(playersList, onDismiss, navController) }
-//        composable(Routes.ChooseTruthorDare.route) { ChooseTruthOrDare(playersList, onDismiss, navController)  }
-//
-//    }
-//}
 
 
 

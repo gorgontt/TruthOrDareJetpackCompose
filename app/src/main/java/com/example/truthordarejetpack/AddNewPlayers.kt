@@ -22,8 +22,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.OutlinedTextField
@@ -429,7 +431,7 @@ fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit, navCont
             shape = RoundedCornerShape(15.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Orange),
             onClick = {navController.navigate(Routes.Pager.route)}
-            //onClick = onPagerOpen, // Теперь мы используем переданный колбек
+
         )
         {
 
@@ -455,11 +457,13 @@ fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit, navCont
 @Composable
 fun PlayersList(playersList: MutableList<String>, onPlayerDelete: (String) -> Unit) {
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
+    //val scrollState = rememberScrollState()
     LazyColumn(
         modifier = Modifier
             .fillMaxHeight()
             .fillMaxWidth()
             .background(brush)
+            //.verticalScroll(scrollState)
             .offset(0.dp, 120.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

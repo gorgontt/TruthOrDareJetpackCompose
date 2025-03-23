@@ -6,14 +6,18 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Scaffold
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -38,17 +42,18 @@ import com.example.truthordarejetpack.couplelists.CoupleSoftTruthList
 import com.example.truthordarejetpack.ui.theme.DarkGray
 import com.example.truthordarejetpack.ui.theme.Gray
 import com.example.truthordarejetpack.ui.theme.Green
+import com.example.truthordarejetpack.ui.theme.LightGray
+import com.example.truthordarejetpack.ui.theme.Orange
 import com.example.truthordarejetpack.ui.theme.ShadowGreen
 import com.example.truthordarejetpack.ui.theme.ShadowViolet
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.Violet
+import com.google.ai.client.generativeai.type.content
 import kotlin.random.Random
 
 @Composable
 fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navController: NavController) {
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
-
-    val randomTruthQuestion = remember { CoupleSoftTruthList.random() }
 
     // Выбор случайного имени игрока
     val randomPlayerName = if (playersList.isNotEmpty()) {
@@ -128,7 +133,9 @@ fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navContr
                         offsetY = 8.dp, offsetX = 8.dp
                     )
                     .clickable {
-                        //Question()
+                        navController.navigate(Routes.Question.route)
+//                        val randomTruthQuestion = CoupleSoftTruthList.random() // случайный вопрос
+//                        navController.navigate("${Routes.Question.route}/$randomTruthQuestion")
                     },
                 shape = RoundedCornerShape(0.dp, 30.dp, 30.dp, 0.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -186,7 +193,7 @@ fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navContr
                         offsetY = 8.dp, offsetX = 8.dp
                     )
                     .clickable {
-                        //navController.navigate("players_list/компания")
+                        navController.navigate(Routes.Question.route)
                     },
                 shape = RoundedCornerShape(30.dp, 0.dp, 0.dp, 30.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -222,73 +229,85 @@ fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navContr
 }
 
 
-//@Composable
-//fun Question(){
-//
-//    val brush = Brush.linearGradient(listOf(Gray, DarkGray))
-//
-//    Column(modifier = Modifier.fillMaxSize().background(brush))
-//
-//    {
-//
-//        Text(
-//            modifier = Modifier
-//                .offset(28.dp, 28.dp)
-//                .fillMaxHeight(0.15f)
-//                .fillMaxWidth(0.7f),
-//            text = "TruthOrDare",
-//            textAlign = TextAlign.Center,
-//            style = TextStyle(
-//                color = Green, fontSize = 40.sp, fontFamily = FontFamily(
-//                    Font(R.font.jura_semibold)
-//                )
-//            )
-//        )
-//
-//
-//        Card(
-//            modifier = Modifier
-//                .align(Alignment.CenterHorizontally)
-//                .fillMaxWidth(0.7f)
-//                .padding(0.dp)
-//                .shadow(
-//                    elevation = 5.dp,
-//                    ambientColor = Color.Black,
-//                    spotColor = Color.Black,
-//                    shape = RoundedCornerShape(15.dp)
-//                )
-//                .innerShadow(
-//                    shape = RoundedCornerShape(18.dp), color = Transpar,
-//                    offsetY = (-1).dp, offsetX = (-1).dp
-//                )
-//                // Top left corner shadow.
-//                .innerShadow(
-//                    shape = RoundedCornerShape(18.dp), color = LightGray,
-//                    offsetY = 4.dp, offsetX = 1.dp
-//                ),
-//            shape = RoundedCornerShape(18.dp),
-//        ) {
-//
-//            Box(modifier = Modifier.align(Alignment.CenterHorizontally)){
-//                Text(
-//                    modifier = Modifier
-//                        .fillMaxHeight(0.15f)
-//                        .fillMaxWidth(0.7f),
-//                    text = "Question",
-//                    textAlign = TextAlign.Center,
-//                    style = TextStyle(
-//                        color = Green, fontSize = 40.sp, fontFamily = FontFamily(
-//                            Font(R.font.jura_semibold)
-//                        )
-//                    )
-//                )
-//            }
-//        }
-//
-//    }
-//
-//}
-//
+@Composable
+fun Question(navController: NavController){
+
+    val brush = Brush.linearGradient(listOf(Gray, DarkGray))
+
+    //val question = navController.previousBackStackEntry?.arguments?.getString("question") ?: "No question"
+
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(brush)) {
+
+
+        Column(modifier = Modifier.fillMaxSize().background(brush).padding(top = 30.dp), horizontalAlignment = Alignment.CenterHorizontally)
+
+        {
+
+            Box(modifier = Modifier.padding(top=30.dp)) {
+
+                Text(
+                    modifier = Modifier,
+                    text = "",
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        color = Green, fontSize = 40.sp, fontFamily = FontFamily(
+                            Font(R.font.jura_semibold)
+                        )
+                    )
+                )
+
+            }
+
+
+
+            Spacer(modifier = Modifier.height(30.dp).background(Orange))
+
+
+            Card(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth(0.7f)
+                    .padding(top = 40.dp)
+                    .shadow(
+                        elevation = 5.dp,
+                        ambientColor = Color.Black,
+                        spotColor = Color.Black,
+                        shape = RoundedCornerShape(15.dp)
+                    )
+                    .innerShadow(
+                        shape = RoundedCornerShape(18.dp), color = Transpar,
+                        offsetY = (-1).dp, offsetX = (-1).dp
+                    )
+                    // Top left corner shadow.
+                    .innerShadow(
+                        shape = RoundedCornerShape(18.dp), color = LightGray,
+                        offsetY = 4.dp, offsetX = 1.dp
+                    ),
+                shape = RoundedCornerShape(18.dp),
+            ) {
+
+                Box(modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).background(Gray), contentAlignment = Alignment.Center){
+                    Text(
+                        modifier = Modifier.padding(10.dp),
+                        text = "Question",
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            color = Green, fontSize = 40.sp, fontFamily = FontFamily(
+                                Font(R.font.jura_semibold)
+                            )
+                        )
+                    )
+                }
+            }
+
+        }
+
+
+    }
+
+}
 
 
 
@@ -296,4 +315,4 @@ fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navContr
 
 
 
-//допиши код, если пользователь нажал на режим "пара" в ChooseVersion и выбрал первую страницу пэйджера в Pager(), то в
+
