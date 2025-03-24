@@ -80,8 +80,6 @@ class MainActivity : ComponentActivity() {
 
         val onDismiss: () -> Unit = { /* Действие при закрытии */ }
 
-
-
         NavHost(
             navController = navController,
             startDestination = "splash_screen"
@@ -96,19 +94,12 @@ class MainActivity : ComponentActivity() {
             }
 
             composable(Routes.Pager.route) {
-                val type = it.arguments?.getString("type")
-                Pager(playersList, onDismiss, navController, type)
+                Pager(playersList, onDismiss, navController)
             }
             composable(Routes.ChooseTruthorDare.route) {
-                val imageType = it.arguments?.getString("type")
-                ChooseTruthOrDare(playersList.toList(), imageType, onDismiss, navController)
+                ChooseTruthOrDare(playersList.toList(), onDismiss, navController) // Передавайте playersList как List
             }
-//            composable(Routes.Question.route) {
-//                Question(navController)
-//            }
-
-            composable("question/{type}") { backStackEntry ->
-
+            composable(Routes.Question.route) {
                 Question(navController)
             }
         }

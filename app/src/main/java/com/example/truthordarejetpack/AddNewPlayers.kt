@@ -151,7 +151,7 @@ fun AddNewPlayers(
 
             // Здесь добавляем проверку для отображения Pager
             if (isPagerOpen) {
-                Pager(playersList, onDismiss = { isPagerOpen = false }, navController, type)
+                Pager(playersList, onDismiss = { isPagerOpen = false }, navController) // Метод для закрытия Pager
             }
         }
     )
