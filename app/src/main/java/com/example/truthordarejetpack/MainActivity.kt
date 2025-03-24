@@ -99,8 +99,9 @@ class MainActivity : ComponentActivity() {
             composable(Routes.ChooseTruthorDare.route) {
                 ChooseTruthOrDare(playersList.toList(), onDismiss, navController) // Передавайте playersList как List
             }
-            composable(Routes.Question.route) {
-                Question(navController)
+            composable("question/{type}") {
+                val type = it.arguments?.getString("type")
+                Question(type, navController)
             }
         }
     }

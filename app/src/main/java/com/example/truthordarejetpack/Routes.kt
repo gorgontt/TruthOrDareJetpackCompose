@@ -8,7 +8,7 @@ sealed class Routes(val route: String) {
     object ChooseVersion : Routes("main_screen")
     object Pager : Routes("pager")
     object ChooseTruthorDare : Routes("truth_or_dare")
-    object Question : Routes("questionn")
+    //object Question : Routes("question")
 
 }
 

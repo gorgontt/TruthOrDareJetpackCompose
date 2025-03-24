@@ -133,7 +133,7 @@ fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navContr
                         offsetY = 8.dp, offsetX = 8.dp
                     )
                     .clickable {
-                        navController.navigate(Routes.Question.route)
+                        navController.navigate("question/правда")
 //                        val randomTruthQuestion = CoupleSoftTruthList.random() // случайный вопрос
 //                        navController.navigate("${Routes.Question.route}/$randomTruthQuestion")
                     },
@@ -193,7 +193,8 @@ fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navContr
                         offsetY = 8.dp, offsetX = 8.dp
                     )
                     .clickable {
-                        navController.navigate(Routes.Question.route)
+                        navController.navigate("question/действие")
+                        //navController.navigate(Routes.Question.route)
                     },
                 shape = RoundedCornerShape(30.dp, 0.dp, 0.dp, 30.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -230,7 +231,7 @@ fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navContr
 
 
 @Composable
-fun Question(navController: NavController){
+fun Question(type: String?, navController: NavController){
 
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
 
@@ -249,7 +250,11 @@ fun Question(navController: NavController){
 
                 Text(
                     modifier = Modifier,
-                    text = "",
+                    text = when (type) {
+                        "правда" -> "правда"
+                        "действие" -> "действие"
+                        else -> "Неизвестный тип"
+                    },
                     textAlign = TextAlign.Center,
                     style = TextStyle(
                         color = Green, fontSize = 40.sp, fontFamily = FontFamily(
