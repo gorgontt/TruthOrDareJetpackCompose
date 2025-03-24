@@ -52,7 +52,7 @@ import com.google.ai.client.generativeai.type.content
 import kotlin.random.Random
 
 @Composable
-fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navController: NavController) {
+fun ChooseTruthOrDare(playersList: List<String>, imageType: String?, onDismiss: () -> Unit, navController: NavController) {
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
 
     // Выбор случайного имени игрока
@@ -133,7 +133,8 @@ fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navContr
                         offsetY = 8.dp, offsetX = 8.dp
                     )
                     .clickable {
-                        navController.navigate(Routes.Question.route)
+                        navController.navigate("question/$imageType")
+                        //navController.navigate(Routes.Question.route)
 //                        val randomTruthQuestion = CoupleSoftTruthList.random() // случайный вопрос
 //                        navController.navigate("${Routes.Question.route}/$randomTruthQuestion")
                     },
@@ -234,6 +235,7 @@ fun Question(navController: NavController){
 
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
 
+    val type = navController.previousBackStackEntry?.arguments?.getString("type") ?: "Неизвестный тип"
     //val question = navController.previousBackStackEntry?.arguments?.getString("question") ?: "No question"
 
     Box(modifier = Modifier
@@ -249,7 +251,7 @@ fun Question(navController: NavController){
 
                 Text(
                     modifier = Modifier,
-                    text = "",
+                    text = type ?: "no data",
                     textAlign = TextAlign.Center,
                     style = TextStyle(
                         color = Green, fontSize = 40.sp, fontFamily = FontFamily(
