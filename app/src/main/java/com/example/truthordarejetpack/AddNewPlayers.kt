@@ -85,7 +85,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class,ExperimentalFoundationApi::class)
 @Composable
 fun AddNewPlayers(
-    type: String?,
+    type: String,
     navController: NavController,
     playersList: SnapshotStateList<String>
 ) {
@@ -139,7 +139,7 @@ fun AddNewPlayers(
                     containerColor = Transpar,
                     contentColor = Transpar
                 ) {
-                    BottomBar(playersList, onPagerOpen = { isPagerOpen = true }, navController)
+                    BottomBar(type, playersList, onPagerOpen = { isPagerOpen = true }, navController)
                 }
             }
         },
@@ -151,7 +151,7 @@ fun AddNewPlayers(
 
             // Здесь добавляем проверку для отображения Pager
             if (isPagerOpen) {
-                Pager(playersList, onDismiss = { isPagerOpen = false }, navController) // Метод для закрытия Pager
+                Pager(type, playersList, onDismiss = { isPagerOpen = false }, navController) // Метод для закрытия Pager
             }
         }
     )
@@ -314,10 +314,7 @@ fun BottomSheetDialogContent(playersList: MutableList<String>, onDismiss: () -> 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit, navController: NavController){
-
-    val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
-    var isSheetOpen by remember { mutableStateOf(false) }
+fun BottomBar(type: String, playersList: MutableList<String>, onPagerOpen: () -> Unit, navController: NavController){
 
     Row(
         modifier = Modifier
@@ -430,7 +427,7 @@ fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit, navCont
                 ),
             shape = RoundedCornerShape(15.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Orange),
-            onClick = {navController.navigate(Routes.Pager.route)}
+            onClick = {navController.navigate("pager/$type")}
 
         )
         {

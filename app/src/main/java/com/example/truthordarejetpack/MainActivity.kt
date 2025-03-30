@@ -75,10 +75,10 @@ class MainActivity : ComponentActivity() {
     fun Navigation() {
         val navController = rememberNavController()
         val context = LocalContext.current
-        val savedPlayers = loadPlayers(context).toMutableList() // Загружаем сохраненные имена игроков
+        val savedPlayers = loadPlayers(context).toMutableList()
         val playersList = remember { mutableStateListOf(*savedPlayers.toTypedArray()) }
 
-        val onDismiss: () -> Unit = { /* Действие при закрытии */ }
+        val onDismiss: () -> Unit = { /* действие при закрытии */ }
 
         NavHost(
             navController = navController,
@@ -87,22 +87,49 @@ class MainActivity : ComponentActivity() {
             composable(Routes.SplashScreen.route) { SplashScreen(navController) }
             composable(Routes.ChooseVersion.route) { ChooseVersion(navController) }
 
-            // Players List Screen
+            // 1 навигация
             composable("players_list/{type}") { backStackEntry ->
                 val type = backStackEntry.arguments?.getString("type")
-                AddNewPlayers(type, navController, playersList) // Теперь playersList обновляется здесь
+                type?.let {
+                    AddNewPlayers(type = it, navController, playersList)
+                }
             }
 
-            composable(Routes.Pager.route) {
-                Pager(playersList, onDismiss, navController)
+            composable("pager/{type}") { backStackEntry ->
+                val type = backStackEntry.arguments?.getString("type")
+                type?.let {
+                    Pager(type = it, playersList, onDismiss, navController)
+                }
             }
-            composable(Routes.ChooseTruthorDare.route) {
-                ChooseTruthOrDare(playersList.toList(), onDismiss, navController) // Передавайте playersList как List
+
+            composable("choose_truth_or_dare/{type}") { backStackEntry ->
+                val type = backStackEntry.arguments?.getString("type")
+
+                type?.let {
+                    ChooseTruthOrDare(type = it, playersList, onDismiss, navController)
+
+
+                }
             }
-            composable("question/{type}") {
-                val type = it.arguments?.getString("type")
-                Question(type, navController)
+
+            // Question Screen
+            composable("question/{type}") { backStackEntry ->
+                val type = backStackEntry.arguments?.getString("type")
+                val typeTD = backStackEntry.arguments?.getString("typeTD")
+
+                Question(type = type, typeTD = typeTD, navController)
+
+                  // Передаем тип в Question
             }
+
+//            composable(Routes.Pager.route) {
+//                Pager(playersList, onDismiss, navController)
+//            }
+//            composable(Routes.ChooseTruthorDare.route) {
+//                // We will add type here while navigating
+//                val type = it.arguments?.getString("type")
+//                ChooseTruthOrDare(type, playersList.toList(), onDismiss, navController)
+//            }
         }
     }
 
@@ -237,7 +264,11 @@ class MainActivity : ComponentActivity() {
                             offsetY = 8.dp, offsetX = 8.dp
                         )
                         .clickable {
+                            navController.navigate("question/пара")
                             navController.navigate("players_list/пара")
+
+
+
                         },
                     shape = RoundedCornerShape(0.dp, 30.dp, 30.dp, 0.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -291,6 +322,7 @@ class MainActivity : ComponentActivity() {
                             offsetY = 8.dp, offsetX = 8.dp
                         )
                         .clickable {
+                            navController.navigate("question/компания")
                             navController.navigate("players_list/компания")
                         },
                     shape = RoundedCornerShape(30.dp, 0.dp, 0.dp, 30.dp),

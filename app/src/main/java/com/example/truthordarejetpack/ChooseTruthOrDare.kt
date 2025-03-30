@@ -52,7 +52,7 @@ import com.google.ai.client.generativeai.type.content
 import kotlin.random.Random
 
 @Composable
-fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navController: NavController) {
+fun ChooseTruthOrDare(type: String?, playersList: List<String>, onDismiss: () -> Unit, navController: NavController) {
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
 
     // Выбор случайного имени игрока
@@ -133,7 +133,8 @@ fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navContr
                         offsetY = 8.dp, offsetX = 8.dp
                     )
                     .clickable {
-                        navController.navigate("question/правда")
+                        //navController.navigate("question/правда")
+                        navController.navigate("question/$type")
 //                        val randomTruthQuestion = CoupleSoftTruthList.random() // случайный вопрос
 //                        navController.navigate("${Routes.Question.route}/$randomTruthQuestion")
                     },
@@ -193,8 +194,7 @@ fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navContr
                         offsetY = 8.dp, offsetX = 8.dp
                     )
                     .clickable {
-                        navController.navigate("question/действие")
-                        //navController.navigate(Routes.Question.route)
+
                     },
                 shape = RoundedCornerShape(30.dp, 0.dp, 0.dp, 30.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -231,7 +231,7 @@ fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navContr
 
 
 @Composable
-fun Question(type: String?, navController: NavController){
+fun Question(type: String?, typeTD: String?, navController: NavController){
 
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
 
@@ -248,22 +248,25 @@ fun Question(type: String?, navController: NavController){
 
             Box(modifier = Modifier.padding(top=30.dp)) {
 
-                Text(
-                    modifier = Modifier,
-                    text = when (type) {
-                        "правда" -> "правда"
-                        "действие" -> "действие"
-                        else -> "Неизвестный тип"
-                    },
-                    textAlign = TextAlign.Center,
-                    style = TextStyle(
-                        color = Green, fontSize = 40.sp, fontFamily = FontFamily(
-                            Font(R.font.jura_semibold)
+
+                    Text(
+                        modifier = Modifier,
+                        text = "type",
+//                                text = when (type) {
+//                                    "правда" -> "правда"
+//                                    "действие" -> "действие"
+//                                    else -> "Неизвестный тип"
+//                                },
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            color = Green, fontSize = 40.sp, fontFamily = FontFamily(
+                                Font(R.font.jura_semibold)
+                            )
                         )
                     )
-                )
+                }
 
-            }
+
 
 
 
@@ -296,7 +299,12 @@ fun Question(type: String?, navController: NavController){
                 Box(modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).background(Gray), contentAlignment = Alignment.Center){
                     Text(
                         modifier = Modifier.padding(10.dp),
-                        text = "Question",
+                        text = "$type",
+//                        text = when (type) {
+//                            "пара" -> "Версия пара"
+//                            "компания" -> "Версия компания"
+//                            else -> "Неизвестный тип"
+//                        },
                         textAlign = TextAlign.Center,
                         style = TextStyle(
                             color = Green, fontSize = 40.sp, fontFamily = FontFamily(

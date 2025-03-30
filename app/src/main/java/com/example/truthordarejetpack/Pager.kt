@@ -52,7 +52,7 @@ import com.google.accompanist.pager.PagerState
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
 @Composable
-fun Pager(playersList: List<String>, onDismiss: () -> Unit, navController: NavController){
+fun Pager(type: String, playersList: List<String>, onDismiss: () -> Unit, navController: NavController){
 
     val text1 = "Soft"
     val text2 = "Hot"
@@ -124,6 +124,7 @@ fun Pager(playersList: List<String>, onDismiss: () -> Unit, navController: NavCo
 
             OnBoardingPager(
                 //navController = NavController(context = Context),
+                type,
                 item = items,
                 pagerState = pagerState,
                 colors = colors,
@@ -146,6 +147,7 @@ fun Pager(playersList: List<String>, onDismiss: () -> Unit, navController: NavCo
 @Composable
 fun OnBoardingPager(
 
+    type: String,
     item: List<OnBoardingData>,
     pagerState: PagerState,
     colors: List<Color>,
@@ -240,7 +242,7 @@ fun OnBoardingPager(
                                 colors = ButtonDefaults.buttonColors(containerColor = Gray),
                                 onClick = {
                                     if (page == 0) { // Assuming 0 is the "Soft" page
-                                    navController.navigate(Routes.ChooseTruthorDare.route)
+                                    navController.navigate("choose_truth_or_dare/$type")
                                 }} //{ showTruthOrDare = true } //navController.navigate("players_list/пара")
                             ) {
                                 Text(
