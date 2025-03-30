@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -38,7 +36,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.truthordarejetpack.couplelists.CoupleSoftTruthList
 import com.example.truthordarejetpack.ui.theme.DarkGray
 import com.example.truthordarejetpack.ui.theme.Gray
 import com.example.truthordarejetpack.ui.theme.Green
@@ -48,7 +45,6 @@ import com.example.truthordarejetpack.ui.theme.ShadowGreen
 import com.example.truthordarejetpack.ui.theme.ShadowViolet
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.Violet
-import com.google.ai.client.generativeai.type.content
 import kotlin.random.Random
 
 @Composable
@@ -134,8 +130,6 @@ fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navContr
                     )
                     .clickable {
                         navController.navigate("question/правда")
-//                        val randomTruthQuestion = CoupleSoftTruthList.random() // случайный вопрос
-//                        navController.navigate("${Routes.Question.route}/$randomTruthQuestion")
                     },
                 shape = RoundedCornerShape(0.dp, 30.dp, 30.dp, 0.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -194,7 +188,6 @@ fun ChooseTruthOrDare(playersList: List<String>, onDismiss: () -> Unit, navContr
                     )
                     .clickable {
                         navController.navigate("question/действие")
-                        //navController.navigate(Routes.Question.route)
                     },
                 shape = RoundedCornerShape(30.dp, 0.dp, 0.dp, 30.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -316,8 +309,21 @@ fun Question(type: String?, navController: NavController){
 
 
 
+//val questionText = when (type) {
+//    "правда" -> CoupleSoftTruthList.random() // Выбираем случайный вопрос только для 'правда'
+//    "действие" -> "действие" // Здесь можно добавить вашу логику для действия
+//    else -> "Неизвестный тип"
+//}
 
 
+//Text(
+//modifier = Modifier,
+//text = questionText,
+//textAlign = TextAlign.Center,
+//style = TextStyle(
+//color = Green, fontSize = 40.sp, fontFamily = FontFamily(Font(R.font.jura_semibold))
+//)
+//)
 
 
 
