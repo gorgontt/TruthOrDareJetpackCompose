@@ -235,7 +235,11 @@ fun Question(type: String?, modeType: String?, typeTD: String?, navController: N
 
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
 
-    //val question = navController.previousBackStackEntry?.arguments?.getString("question") ?: "No question"
+    val question = when {
+        type == "пара" && typeTD == "правда" && modeType == "soft" -> CoupleSoftTruthList.random()
+        //type == "компания" && typeTD == "правда" && modeType == "soft" -> companySoftTruths.random()
+        else -> "Неизвестный вопрос"
+    }
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -266,33 +270,14 @@ fun Question(type: String?, modeType: String?, typeTD: String?, navController: N
                 }
 
 
-            Text(
-                modifier = Modifier,
-                text = when (modeType) {
-                    "soft" -> "soft"
-                    "hot" -> "hot"
-                    "hard" -> "hard"
-                    "extreme" -> "extreme"
-                    else -> "Неизвестный тип"
-                },
-                textAlign = TextAlign.Center,
-                style = TextStyle(
-                    color = Green, fontSize = 40.sp, fontFamily = FontFamily(
-                        Font(R.font.jura_semibold)
-                    )
-                )
-            )
-
-
-
             Spacer(modifier = Modifier.height(30.dp).background(Orange))
 
 
             Card(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(0.7f)
-                    .padding(top = 40.dp)
+                    .fillMaxWidth()
+                    .padding(top = 40.dp, start = 10.dp, end = 10.dp)
                     .shadow(
                         elevation = 5.dp,
                         ambientColor = Color.Black,
@@ -311,13 +296,14 @@ fun Question(type: String?, modeType: String?, typeTD: String?, navController: N
                 shape = RoundedCornerShape(18.dp),
             ) {
 
-                Box(modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).background(Gray), contentAlignment = Alignment.Center){
+                Box(modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).background(
+                    Gray), contentAlignment = Alignment.Center){
                     Text(
                         modifier = Modifier.padding(10.dp),
-                        text = "$type",
-                        textAlign = TextAlign.Center,
+                        text = question,
+                        //textAlign = TextAlign.Center,
                         style = TextStyle(
-                            color = Green, fontSize = 40.sp, fontFamily = FontFamily(
+                            color = Green, fontSize = 30.sp, fontFamily = FontFamily(
                                 Font(R.font.jura_semibold)
                             )
                         )
