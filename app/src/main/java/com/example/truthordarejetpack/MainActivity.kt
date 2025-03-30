@@ -102,22 +102,21 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            composable("choose_truth_or_dare/{type}") { backStackEntry ->
+            composable("choose_truth_or_dare/{type}/{modeType}") { backStackEntry ->
                 val type = backStackEntry.arguments?.getString("type")
+                val modeType = backStackEntry.arguments?.getString("modeType")
 
-                type?.let {
-                    ChooseTruthOrDare(type = it, playersList, onDismiss, navController)
+                ChooseTruthOrDare(type = type, modeType = modeType, playersList, onDismiss, navController)
 
-
-                }
             }
 
             // Question Screen
-            composable("question/{type}/{typeTD}") { backStackEntry ->
+            composable("question/{type}/{modeType}/{typeTD}") { backStackEntry ->
                 val type = backStackEntry.arguments?.getString("type")
                 val typeTD = backStackEntry.arguments?.getString("typeTD")
+                val modeType = backStackEntry.arguments?.getString("modeType")
 
-                Question(type = type, typeTD = typeTD, navController = navController)
+                Question(type = type, modeType = modeType, typeTD = typeTD, navController = navController)
             }
         }
     }

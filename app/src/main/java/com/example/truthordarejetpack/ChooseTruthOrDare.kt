@@ -52,7 +52,7 @@ import com.google.ai.client.generativeai.type.content
 import kotlin.random.Random
 
 @Composable
-fun ChooseTruthOrDare(type: String?, playersList: List<String>, onDismiss: () -> Unit, navController: NavController) {
+fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String>, onDismiss: () -> Unit, navController: NavController) {
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
 
     // Выбор случайного имени игрока
@@ -134,7 +134,7 @@ fun ChooseTruthOrDare(type: String?, playersList: List<String>, onDismiss: () ->
                     )
                     .clickable {
                         //navController.navigate("question/правда")
-                        navController.navigate("question/$type/правда")
+                        navController.navigate("question/$type/$modeType/правда")
 //                        val randomTruthQuestion = CoupleSoftTruthList.random() // случайный вопрос
 //                        navController.navigate("${Routes.Question.route}/$randomTruthQuestion")
                     },
@@ -194,7 +194,7 @@ fun ChooseTruthOrDare(type: String?, playersList: List<String>, onDismiss: () ->
                         offsetY = 8.dp, offsetX = 8.dp
                     )
                     .clickable {
-                        navController.navigate("question/$type/действие")
+                        navController.navigate("question/$type/$modeType/действие")
                     },
                 shape = RoundedCornerShape(30.dp, 0.dp, 0.dp, 30.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -231,7 +231,7 @@ fun ChooseTruthOrDare(type: String?, playersList: List<String>, onDismiss: () ->
 
 
 @Composable
-fun Question(type: String?, typeTD: String?, navController: NavController){
+fun Question(type: String?, modeType: String?, typeTD: String?, navController: NavController){
 
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
 
@@ -266,6 +266,22 @@ fun Question(type: String?, typeTD: String?, navController: NavController){
                 }
 
 
+            Text(
+                modifier = Modifier,
+                text = when (modeType) {
+                    "soft" -> "soft"
+                    "hot" -> "hot"
+                    "hard" -> "hard"
+                    "extreme" -> "extreme"
+                    else -> "Неизвестный тип"
+                },
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    color = Green, fontSize = 40.sp, fontFamily = FontFamily(
+                        Font(R.font.jura_semibold)
+                    )
+                )
+            )
 
 
 

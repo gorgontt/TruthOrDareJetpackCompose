@@ -241,9 +241,23 @@ fun OnBoardingPager(
                                 shape = RoundedCornerShape(18.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = Gray),
                                 onClick = {
-                                    if (page == 0) { // Assuming 0 is the "Soft" page
-                                    navController.navigate("choose_truth_or_dare/$type")
-                                }} //{ showTruthOrDare = true } //navController.navigate("players_list/пара")
+                                    if (page == 0) {
+                                        navController.navigate("choose_truth_or_dare/$type/soft")
+                                    }
+
+                                    if (page == 1) {
+                                        navController.navigate("choose_truth_or_dare/$type/hot")
+                                    }
+
+                                    if (page == 2) {
+                                        navController.navigate("choose_truth_or_dare/$type/hard")
+                                    }
+
+                                    if (page == 3) {
+                                        navController.navigate("choose_truth_or_dare/$type/extreme")
+                                    }
+
+                                }
                             ) {
                                 Text(
                                     modifier = Modifier
