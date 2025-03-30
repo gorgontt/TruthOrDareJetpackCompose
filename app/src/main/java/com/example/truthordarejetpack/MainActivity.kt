@@ -93,20 +93,11 @@ class MainActivity : ComponentActivity() {
                 AddNewPlayers(type, navController, playersList) // Теперь playersList обновляется здесь
             }
 
-//            composable("players_list/{type}") { backStackEntry ->
-//                val type = backStackEntry.arguments?.getString("type")
-//                Question(type, navController) // Теперь playersList обновляется здесь
-//            }
-
             composable(Routes.Pager.route) {
                 Pager(playersList, onDismiss, navController)
             }
             composable(Routes.ChooseTruthorDare.route) {
                 ChooseTruthOrDare(playersList.toList(), onDismiss, navController) // Передавайте playersList как List
-            }
-            composable("question/{type}") {
-                val type = it.arguments?.getString("type")
-                Question(type, navController)
             }
             composable("question/{type}") {
                 val type = it.arguments?.getString("type")

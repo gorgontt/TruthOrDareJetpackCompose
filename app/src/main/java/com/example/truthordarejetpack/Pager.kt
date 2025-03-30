@@ -63,7 +63,6 @@ fun Pager(playersList: List<String>, onDismiss: () -> Unit, navController: NavCo
 
     val colors = listOf(Green, Orange, Red, Pink)
 
-
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -159,8 +158,6 @@ fun OnBoardingPager(
 
     var showTruthOrDare by remember { mutableStateOf(false) }
 
-    val backType = navController.previousBackStackEntry?.arguments?.getString("type")
-
     Box (
         modifier = Modifier
             .background(brush)
@@ -243,9 +240,8 @@ fun OnBoardingPager(
                                 colors = ButtonDefaults.buttonColors(containerColor = Gray),
                                 onClick = {
                                     if (page == 0) { // Assuming 0 is the "Soft" page
-                                        navController.navigate(Routes.ChooseTruthorDare.route + "/$backType")
-                                    //navController.navigate(Routes.ChooseTruthorDare.route)
-                                }}
+                                    navController.navigate(Routes.ChooseTruthorDare.route)
+                                }} //{ showTruthOrDare = true } //navController.navigate("players_list/пара")
                             ) {
                                 Text(
                                     modifier = Modifier

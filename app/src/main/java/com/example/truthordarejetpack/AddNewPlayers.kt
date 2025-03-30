@@ -139,7 +139,7 @@ fun AddNewPlayers(
                     containerColor = Transpar,
                     contentColor = Transpar
                 ) {
-                    BottomBar(playersList, onPagerOpen = { isPagerOpen = true }, navController, type)
+                    BottomBar(playersList, onPagerOpen = { isPagerOpen = true }, navController)
                 }
             }
         },
@@ -314,7 +314,7 @@ fun BottomSheetDialogContent(playersList: MutableList<String>, onDismiss: () -> 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit, navController: NavController, type: String?){
+fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit, navController: NavController){
 
     val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
     var isSheetOpen by remember { mutableStateOf(false) }
@@ -430,10 +430,7 @@ fun BottomBar(playersList: MutableList<String>, onPagerOpen: () -> Unit, navCont
                 ),
             shape = RoundedCornerShape(15.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Orange),
-            onClick = {
-                navController.navigate(Routes.Pager.route + "/$type")
-                //navController.navigate(Routes.Pager.route)
-            }
+            onClick = {navController.navigate(Routes.Pager.route)}
 
         )
         {
