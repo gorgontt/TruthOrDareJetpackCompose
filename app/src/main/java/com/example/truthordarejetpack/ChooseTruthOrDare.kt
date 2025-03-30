@@ -134,7 +134,7 @@ fun ChooseTruthOrDare(type: String?, playersList: List<String>, onDismiss: () ->
                     )
                     .clickable {
                         //navController.navigate("question/правда")
-                        navController.navigate("question/$type")
+                        navController.navigate("question/$type/правда")
 //                        val randomTruthQuestion = CoupleSoftTruthList.random() // случайный вопрос
 //                        navController.navigate("${Routes.Question.route}/$randomTruthQuestion")
                     },
@@ -194,7 +194,7 @@ fun ChooseTruthOrDare(type: String?, playersList: List<String>, onDismiss: () ->
                         offsetY = 8.dp, offsetX = 8.dp
                     )
                     .clickable {
-
+                        navController.navigate("question/$type/действие")
                     },
                 shape = RoundedCornerShape(30.dp, 0.dp, 0.dp, 30.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -251,12 +251,11 @@ fun Question(type: String?, typeTD: String?, navController: NavController){
 
                     Text(
                         modifier = Modifier,
-                        text = "type",
-//                                text = when (type) {
-//                                    "правда" -> "правда"
-//                                    "действие" -> "действие"
-//                                    else -> "Неизвестный тип"
-//                                },
+                        text = when (typeTD) {
+                            "правда" -> "правда"
+                            "действие" -> "действие"
+                            else -> "Неизвестный тип"
+                        },
                         textAlign = TextAlign.Center,
                         style = TextStyle(
                             color = Green, fontSize = 40.sp, fontFamily = FontFamily(
@@ -300,11 +299,6 @@ fun Question(type: String?, typeTD: String?, navController: NavController){
                     Text(
                         modifier = Modifier.padding(10.dp),
                         text = "$type",
-//                        text = when (type) {
-//                            "пара" -> "Версия пара"
-//                            "компания" -> "Версия компания"
-//                            else -> "Неизвестный тип"
-//                        },
                         textAlign = TextAlign.Center,
                         style = TextStyle(
                             color = Green, fontSize = 40.sp, fontFamily = FontFamily(

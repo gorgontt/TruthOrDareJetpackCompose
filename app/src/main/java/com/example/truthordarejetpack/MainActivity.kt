@@ -113,23 +113,12 @@ class MainActivity : ComponentActivity() {
             }
 
             // Question Screen
-            composable("question/{type}") { backStackEntry ->
+            composable("question/{type}/{typeTD}") { backStackEntry ->
                 val type = backStackEntry.arguments?.getString("type")
                 val typeTD = backStackEntry.arguments?.getString("typeTD")
 
-                Question(type = type, typeTD = typeTD, navController)
-
-                  // Передаем тип в Question
+                Question(type = type, typeTD = typeTD, navController = navController)
             }
-
-//            composable(Routes.Pager.route) {
-//                Pager(playersList, onDismiss, navController)
-//            }
-//            composable(Routes.ChooseTruthorDare.route) {
-//                // We will add type here while navigating
-//                val type = it.arguments?.getString("type")
-//                ChooseTruthOrDare(type, playersList.toList(), onDismiss, navController)
-//            }
         }
     }
 
@@ -264,7 +253,6 @@ class MainActivity : ComponentActivity() {
                             offsetY = 8.dp, offsetX = 8.dp
                         )
                         .clickable {
-                            navController.navigate("question/пара")
                             navController.navigate("players_list/пара")
 
 
@@ -322,7 +310,6 @@ class MainActivity : ComponentActivity() {
                             offsetY = 8.dp, offsetX = 8.dp
                         )
                         .clickable {
-                            navController.navigate("question/компания")
                             navController.navigate("players_list/компания")
                         },
                     shape = RoundedCornerShape(30.dp, 0.dp, 0.dp, 30.dp),
