@@ -111,12 +111,13 @@ class MainActivity : ComponentActivity() {
             }
 
             // Question Screen
-            composable("question/{type}/{modeType}/{typeTD}") { backStackEntry ->
+            composable("question/{type}/{modeType}/{typeTD}/{playerName}") { backStackEntry ->
                 val type = backStackEntry.arguments?.getString("type")
                 val typeTD = backStackEntry.arguments?.getString("typeTD")
                 val modeType = backStackEntry.arguments?.getString("modeType")
+                val playerName = backStackEntry.arguments?.getString("playerName")
 
-                Question(type = type, modeType = modeType, typeTD = typeTD, navController = navController)
+                Question(type = type, modeType = modeType, typeTD = typeTD, playerName = playerName, navController = navController)
             }
         }
     }

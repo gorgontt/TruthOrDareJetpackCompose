@@ -1,5 +1,12 @@
 package com.example.truthordarejetpack
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,7 +31,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -38,12 +49,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.truthordarejetpack.couplelists.CoupleExtremeTruthList
+import com.example.truthordarejetpack.couplelists.CoupleHardTruthList
+import com.example.truthordarejetpack.couplelists.CoupleHotTruthList
 import com.example.truthordarejetpack.couplelists.CoupleSoftTruthList
 import com.example.truthordarejetpack.ui.theme.DarkGray
 import com.example.truthordarejetpack.ui.theme.Gray
 import com.example.truthordarejetpack.ui.theme.Green
 import com.example.truthordarejetpack.ui.theme.LightGray
 import com.example.truthordarejetpack.ui.theme.Orange
+import com.example.truthordarejetpack.ui.theme.Red
 import com.example.truthordarejetpack.ui.theme.ShadowGreen
 import com.example.truthordarejetpack.ui.theme.ShadowViolet
 import com.example.truthordarejetpack.ui.theme.Transpar
@@ -133,10 +148,7 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
                         offsetY = 8.dp, offsetX = 8.dp
                     )
                     .clickable {
-                        //navController.navigate("question/правда")
-                        navController.navigate("question/$type/$modeType/правда")
-//                        val randomTruthQuestion = CoupleSoftTruthList.random() // случайный вопрос
-//                        navController.navigate("${Routes.Question.route}/$randomTruthQuestion")
+                        navController.navigate("question/$type/$modeType/правда/$randomPlayerName")
                     },
                 shape = RoundedCornerShape(0.dp, 30.dp, 30.dp, 0.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -194,7 +206,7 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
                         offsetY = 8.dp, offsetX = 8.dp
                     )
                     .clickable {
-                        navController.navigate("question/$type/$modeType/действие")
+                        navController.navigate("question/$type/$modeType/действие/$randomPlayerName")
                     },
                 shape = RoundedCornerShape(30.dp, 0.dp, 0.dp, 30.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -231,13 +243,16 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
 
 
 @Composable
-fun Question(type: String?, modeType: String?, typeTD: String?, navController: NavController){
+fun Question(type: String?, modeType: String?, typeTD: String?, playerName: String?, navController: NavController){
 
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
-
+    //r boxVisible = remember { mutableStateOf(true) }
+    var boxVisible by rememberSaveable { mutableStateOf(true)}
     val question = when {
         type == "пара" && typeTD == "правда" && modeType == "soft" -> CoupleSoftTruthList.random()
-        //type == "компания" && typeTD == "правда" && modeType == "soft" -> companySoftTruths.random()
+        type == "пара" && typeTD == "правда" && modeType == "hot" -> CoupleHotTruthList.random()
+        type == "пара" && typeTD == "правда" && modeType == "hard" -> CoupleHardTruthList.random()
+        type == "пара" && typeTD == "правда" && modeType == "extreme" -> CoupleExtremeTruthList.random()
         else -> "Неизвестный вопрос"
     }
 
@@ -246,7 +261,11 @@ fun Question(type: String?, modeType: String?, typeTD: String?, navController: N
         .background(brush)) {
 
 
-        Column(modifier = Modifier.fillMaxSize().background(brush).padding(top = 30.dp), horizontalAlignment = Alignment.CenterHorizontally)
+        Column(modifier = Modifier.fillMaxSize().background(brush).padding(top = 30.dp)
+            .clickable {
+                boxVisible = !boxVisible
+                //navController.navigate("splash_screen")
+        }, horizontalAlignment = Alignment.CenterHorizontally)
 
         {
 
@@ -262,7 +281,7 @@ fun Question(type: String?, modeType: String?, typeTD: String?, navController: N
                         },
                         textAlign = TextAlign.Center,
                         style = TextStyle(
-                            color = Green, fontSize = 40.sp, fontFamily = FontFamily(
+                            color = Green, fontSize = 50.sp, fontFamily = FontFamily(
                                 Font(R.font.jura_semibold)
                             )
                         )
@@ -273,43 +292,56 @@ fun Question(type: String?, modeType: String?, typeTD: String?, navController: N
             Spacer(modifier = Modifier.height(30.dp).background(Orange))
 
 
-            Card(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth()
-                    .padding(top = 40.dp, start = 10.dp, end = 10.dp)
-                    .shadow(
-                        elevation = 5.dp,
-                        ambientColor = Color.Black,
-                        spotColor = Color.Black,
-                        shape = RoundedCornerShape(15.dp)
-                    )
-                    .innerShadow(
-                        shape = RoundedCornerShape(18.dp), color = Transpar,
-                        offsetY = (-1).dp, offsetX = (-1).dp
-                    )
-                    // Top left corner shadow.
-                    .innerShadow(
-                        shape = RoundedCornerShape(18.dp), color = LightGray,
-                        offsetY = 4.dp, offsetX = 1.dp
-                    ),
-                shape = RoundedCornerShape(18.dp),
+            androidx.compose.animation.AnimatedVisibility(
+                visible = boxVisible,
+                enter = slideInHorizontally() + expandHorizontally(expandFrom = Alignment.End)
+                        + fadeIn(),
+                exit = slideOutHorizontally(targetOffsetX = { fullWidth -> fullWidth })
+                        + shrinkHorizontally() + fadeOut(),
             ) {
 
-                Box(modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).background(
-                    Gray), contentAlignment = Alignment.Center){
-                    Text(
-                        modifier = Modifier.padding(10.dp),
-                        text = question,
-                        //textAlign = TextAlign.Center,
-                        style = TextStyle(
-                            color = Green, fontSize = 30.sp, fontFamily = FontFamily(
-                                Font(R.font.jura_semibold)
+                Card(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth()
+                        .padding(top = 40.dp, start = 10.dp, end = 10.dp)
+                        .shadow(
+                            elevation = 5.dp,
+                            ambientColor = Color.Black,
+                            spotColor = Color.Black,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                        .innerShadow(
+                            shape = RoundedCornerShape(18.dp), color = Transpar,
+                            offsetY = (-1).dp, offsetX = (-1).dp
+                        )
+                        // Top left corner shadow.
+                        .innerShadow(
+                            shape = RoundedCornerShape(18.dp), color = LightGray,
+                            offsetY = 4.dp, offsetX = 1.dp
+                        ),
+                    shape = RoundedCornerShape(18.dp),
+                ) {
+
+                    Box(modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).background(
+                        Gray), contentAlignment = Alignment.Center){
+
+                        Text(
+                            modifier = Modifier.padding(15.dp),
+                            text = "$playerName, $question",
+                            //textAlign = TextAlign.Center,
+                            style = TextStyle(
+                                color = Color.White, fontSize = 30.sp, fontFamily = FontFamily(
+                                    Font(R.font.jura_semibold)
+                                )
                             )
                         )
-                    )
+                    }
                 }
             }
+
+
+
 
         }
 

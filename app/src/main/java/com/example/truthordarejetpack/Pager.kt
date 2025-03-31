@@ -46,6 +46,7 @@ import com.example.truthordarejetpack.ui.theme.Orange
 import com.example.truthordarejetpack.ui.theme.Pink
 import com.example.truthordarejetpack.ui.theme.Red
 import com.example.truthordarejetpack.ui.theme.Transpar
+import com.example.truthordarejetpack.ui.theme.Violet
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -201,6 +202,13 @@ fun OnBoardingPager(
                         ) {
 
                             Image(
+//                                modifier = Modifier
+//                                    .animatedBorder(
+//                                    borderColors = listOf(Color.Red, Color.Green, Color.Blue),
+//                                    backgroundColor = Transpar,
+//                                    shape = RoundedCornerShape(16.dp),
+//                                    borderWidth = 4.dp
+//                                ),
                                 alignment = Alignment.Center,
                                 painter = painterResource(id = item[page].card),
                                 contentDescription = ""

@@ -2,6 +2,9 @@ package com.example.truthordarejetpack
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -73,8 +76,12 @@ import com.example.truthordarejetpack.ui.theme.DarkOrange
 import com.example.truthordarejetpack.ui.theme.Gray
 import com.example.truthordarejetpack.ui.theme.Green
 import com.example.truthordarejetpack.ui.theme.LightGray
+import com.example.truthordarejetpack.ui.theme.LightGreen
 import com.example.truthordarejetpack.ui.theme.LightOrange
+import com.example.truthordarejetpack.ui.theme.LightPink
 import com.example.truthordarejetpack.ui.theme.Orange
+import com.example.truthordarejetpack.ui.theme.Pink
+import com.example.truthordarejetpack.ui.theme.Red
 import com.example.truthordarejetpack.ui.theme.ShadowGreen
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.Violet
@@ -316,6 +323,8 @@ fun BottomSheetDialogContent(playersList: MutableList<String>, onDismiss: () -> 
 @Composable
 fun BottomBar(type: String, playersList: MutableList<String>, onPagerOpen: () -> Unit, navController: NavController){
 
+
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -363,6 +372,12 @@ fun BottomBar(type: String, playersList: MutableList<String>, onPagerOpen: () ->
                     modifier = Modifier
                         .size(height = 70.dp, width = 60.dp)
                         .background(Gray)
+//                        .animatedBorder(
+//                            borderColors = listOf(Color.Red, Color.Green, Color.Blue),
+//                            backgroundColor = Gray,
+//                            shape = RoundedCornerShape(16.dp),
+//                            borderWidth = 4.dp
+//                        )
                         .innerShadow(
                             shape = RoundedCornerShape(15.dp), color = Color.Black,
                             offsetY = (-0).dp, offsetX = (-0).dp
@@ -408,25 +423,31 @@ fun BottomBar(type: String, playersList: MutableList<String>, onPagerOpen: () ->
             modifier = Modifier
                 .size(height = 70.dp, width = 500.dp)
                 .padding(0.dp)
+                .animatedBorder(
+                    borderColors = listOf(Pink, Violet, Green),
+                    backgroundColor = Gray,
+                    shape = RoundedCornerShape(16.dp),
+                    borderWidth = 4.dp
+                )
                 .fillMaxHeight(0.85f)
                 .fillMaxWidth(0.95f)
                 .shadow(
                     elevation = 10.dp,
-                    ambientColor = Orange,
-                    spotColor = Orange,
+                    ambientColor = Pink,
+                    spotColor = Pink,
                     shape = RoundedCornerShape(15.dp)
                 )
                 .innerShadow(
-                    shape = RoundedCornerShape(15.dp), color = DarkOrange,
+                    shape = RoundedCornerShape(15.dp), color = Violet,
                     offsetY = (-4).dp, offsetX = (-4).dp
                 )
                 // Top left corner shadow.
                 .innerShadow(
-                    shape = RoundedCornerShape(15.dp), color = LightOrange,
+                    shape = RoundedCornerShape(15.dp), color = LightPink,
                     offsetY = 4.dp, offsetX = 4.dp
                 ),
             shape = RoundedCornerShape(15.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Orange),
+            colors = ButtonDefaults.buttonColors(containerColor = Violet),
             onClick = {navController.navigate("pager/$type")}
 
         )
@@ -477,6 +498,13 @@ fun PlayersList(playersList: MutableList<String>, onPlayerDelete: (String) -> Un
                         shape = RoundedCornerShape(37.dp)
 
                     )
+
+//                    .animatedBorder(
+//                        borderColors = listOf(Green, Orange, Pink, Color.Yellow),
+//                        backgroundColor = Color.White,
+//                        shape = RoundedCornerShape(37.dp),
+//                        borderWidth = 4.dp
+//                    )
                     .background(Transpar)
                     .shadow(
                         elevation = 10.dp,
@@ -487,13 +515,13 @@ fun PlayersList(playersList: MutableList<String>, onPlayerDelete: (String) -> Un
 
                     .innerShadow(
                         shape = RoundedCornerShape(40.dp, 50.dp, 37.dp, 50.dp), color = ShadowGreen,
-                        offsetY = (-8).dp, offsetX = (-6).dp
+                        offsetY = (-4).dp, offsetX = (-4).dp
                     )
 
                     // Top left corner shadow.
                     .innerShadow(
                         shape = RoundedCornerShape(40.dp, 50.dp, 37.dp, 50.dp), color = ShadowGreen,
-                        offsetY = 8.dp, offsetX = 6.dp
+                        offsetY = 4.dp, offsetX = 4.dp
                     ),
                 shape = RoundedCornerShape(37.dp)
             ) {
