@@ -31,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,6 +65,9 @@ import com.example.truthordarejetpack.ui.theme.ShadowViolet
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.Violet
 import com.google.ai.client.generativeai.type.content
+import kotlinx.coroutines.delay
+import java.text.BreakIterator
+import java.text.StringCharacterIterator
 import kotlin.random.Random
 
 @Composable
@@ -303,7 +307,6 @@ fun Question(type: String?, modeType: String?, typeTD: String?, playerName: Stri
                 Card(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth()
                         .padding(top = 40.dp, start = 10.dp, end = 10.dp)
                         .shadow(
                             elevation = 5.dp,
@@ -323,12 +326,30 @@ fun Question(type: String?, modeType: String?, typeTD: String?, playerName: Stri
                     shape = RoundedCornerShape(18.dp),
                 ) {
 
-                    Box(modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).background(
+                    Box(modifier = Modifier.align(Alignment.CenterHorizontally).background(
                         Gray), contentAlignment = Alignment.Center){
+                        val text ="$playerName, $question"
+                        val breakIterator = remember(text) { BreakIterator.getCharacterInstance() }
 
+                        val typingDelayInMs = 50L
+
+                        var substringText by remember {
+                            mutableStateOf("")
+                        }
+                        LaunchedEffect(text) {
+                            delay(500)
+                            breakIterator.text = StringCharacterIterator(text)
+
+                            var nextIndex = breakIterator.next()
+                            while (nextIndex != BreakIterator.DONE) {
+                                substringText = text.subSequence(0, nextIndex).toString()
+                                nextIndex = breakIterator.next()
+                                delay(typingDelayInMs)
+                            }
+                        }
                         Text(
                             modifier = Modifier.padding(15.dp),
-                            text = "$playerName, $question",
+                            text = substringText,
                             //textAlign = TextAlign.Center,
                             style = TextStyle(
                                 color = Color.White, fontSize = 30.sp, fontFamily = FontFamily(
