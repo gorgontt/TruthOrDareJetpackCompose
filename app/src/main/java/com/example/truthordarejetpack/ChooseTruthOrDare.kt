@@ -59,6 +59,7 @@ import com.example.truthordarejetpack.ui.theme.Gray
 import com.example.truthordarejetpack.ui.theme.Green
 import com.example.truthordarejetpack.ui.theme.LightGray
 import com.example.truthordarejetpack.ui.theme.Orange
+import com.example.truthordarejetpack.ui.theme.Pink
 import com.example.truthordarejetpack.ui.theme.Red
 import com.example.truthordarejetpack.ui.theme.ShadowGreen
 import com.example.truthordarejetpack.ui.theme.ShadowViolet
@@ -133,6 +134,12 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
                         color = Green,
                         shape = RoundedCornerShape(0.dp, 30.dp, 30.dp, 0.dp)
                     )
+                    .animatedBorder(
+                        borderColors = listOf(Orange, Green),
+                        backgroundColor = Gray,
+                        shape = RoundedCornerShape(0.dp, 30.dp, 30.dp, 0.dp),
+                        borderWidth = 4.dp
+                    )
                     .background(Transpar)
                     .fillMaxWidth(0.9f)
                     .fillMaxHeight(0.4f)
@@ -167,7 +174,13 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
                     Image(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .padding(20.dp),
+                            .padding(20.dp)
+                            .animatedBorder(
+                                borderColors = listOf(Orange, Green),
+                                backgroundColor = Gray,
+                                shape = RoundedCornerShape(30.dp),
+                                borderWidth = 4.dp
+                            ),
                         painter = painterResource(id = R.drawable.truth_icon),
                         contentDescription = "TruthIcon"
                     )
@@ -190,6 +203,12 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
                         width = 2.dp,
                         color = Violet,
                         shape = RoundedCornerShape(30.dp, 0.dp, 0.dp, 30.dp)
+                    )
+                    .animatedBorder(
+                        borderColors = listOf(Pink, Violet),
+                        backgroundColor = Gray,
+                        shape = RoundedCornerShape(30.dp, 0.dp, 0.dp, 30.dp),
+                        borderWidth = 4.dp
                     )
                     .background(Transpar)
                     .fillMaxWidth(0.9f)
@@ -225,7 +244,13 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
                     Image(
                         modifier = Modifier
                             .align(Alignment.TopStart)
-                            .padding(20.dp),
+                            .padding(20.dp)
+                            .animatedBorder(
+                                borderColors = listOf(Pink, Violet),
+                                backgroundColor = Gray,
+                                shape = RoundedCornerShape(30.dp),
+                                borderWidth = 4.dp
+                            ),
                         painter = painterResource(id = R.drawable.dare_icon),
                         contentDescription = "DareIcon"
                     )

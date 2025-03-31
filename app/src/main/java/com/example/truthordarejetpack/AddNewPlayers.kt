@@ -2,6 +2,7 @@ package com.example.truthordarejetpack
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.hardware.lights.Light
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -273,17 +274,23 @@ fun BottomSheetDialogContent(playersList: MutableList<String>, onDismiss: () -> 
                         spotColor = Color.Black,
                         shape = RoundedCornerShape(18.dp)
                     )
+                    .animatedBorder(
+                        borderColors = listOf(Pink, Violet, Green),
+                        backgroundColor = Gray,
+                        shape = RoundedCornerShape(16.dp),
+                        borderWidth = 4.dp
+                    )
                     .innerShadow(
-                        shape = RoundedCornerShape(18.dp), color = Transpar,
+                        shape = RoundedCornerShape(18.dp), color = Violet,
                         offsetY = (-1).dp, offsetX = (-1).dp
                     )
                     // Top left corner shadow.
                     .innerShadow(
-                        shape = RoundedCornerShape(18.dp), color = LightGray,
+                        shape = RoundedCornerShape(18.dp), color = LightPink,
                         offsetY = 4.dp, offsetX = 1.dp
                     ),
                 shape = RoundedCornerShape(18.dp),
-                colors = ButtonDefaults.buttonColors(Gray),
+                colors = ButtonDefaults.buttonColors(Violet),
                 onClick = {
                     if (text.isNotBlank()) {
                         playersList.add(text) // Добавляем нового игрока
@@ -300,7 +307,7 @@ fun BottomSheetDialogContent(playersList: MutableList<String>, onDismiss: () -> 
                     modifier = Modifier.padding(top = 5.dp, bottom = 5.dp),
                     text = "Ok",
                     style = TextStyle(
-                        color = Violet,
+                        color = DarkGray,
                         fontSize = 30.sp,
                         fontFamily = FontFamily(Font(R.font.jura_semibold))
                     )

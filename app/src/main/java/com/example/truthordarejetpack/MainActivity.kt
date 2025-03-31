@@ -227,6 +227,7 @@ class MainActivity : ComponentActivity() {
                     )
                 )
 
+
                 Card(
                     modifier = Modifier
                         .border(
