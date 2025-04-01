@@ -31,6 +31,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
@@ -127,8 +128,8 @@ fun AddNewPlayers(
                         )
                     },
                     navigationIcon = {
-                        IconButton(onClick = { navController.navigate("main_screen") }) {
-                            Icon(painter = painterResource(id = R.drawable.arrow_back), contentDescription = "Меню")
+                        IconButton(onClick = { navController.popBackStack(route = "players_list/{type}", inclusive = true) }) {
+                            Icon(painter = painterResource(id = R.drawable.back_icon2), contentDescription = "Меню")
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(

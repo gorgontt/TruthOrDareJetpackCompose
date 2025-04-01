@@ -87,6 +87,10 @@ class MainActivity : ComponentActivity() {
             composable(Routes.SplashScreen.route) { SplashScreen(navController) }
             composable(Routes.ChooseVersion.route) { ChooseVersion(navController) }
 
+//            composable("choose_version") {
+//                ChooseVersion(navController)
+//            }
+
             // 1 навигация
             composable("players_list/{type}") { backStackEntry ->
                 val type = backStackEntry.arguments?.getString("type")

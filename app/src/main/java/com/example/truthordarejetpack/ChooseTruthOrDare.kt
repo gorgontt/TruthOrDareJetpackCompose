@@ -295,10 +295,9 @@ fun Question(type: String?, modeType: String?, typeTD: String?, playerName: Stri
 
         Column(modifier = Modifier.fillMaxSize().background(brush).padding(top = 30.dp)
             .clickable {
-                //boxVisible = !boxVisible
+                boxVisible = !boxVisible
                 navController.popBackStack(route = "choose_truth_or_dare/{type}/{modeType}", inclusive = true)
-                //navigation.popBackStack(route = "DestinationC/{id}", inclusive = true)
-                //navController.navigate("splash_screen_td")
+
         }, horizontalAlignment = Alignment.CenterHorizontally)
 
         {
