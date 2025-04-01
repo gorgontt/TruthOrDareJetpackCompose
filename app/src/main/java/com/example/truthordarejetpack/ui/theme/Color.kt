@@ -30,3 +30,8 @@ val LightGreen = Color(0xFFE9FFAA)
 val LightOrange = Color(0xFFF5B16C)
 val DarkOrange = Color(0xFFF44336)
 val LightPink = Color(0xFFFF72CD)
+val NavigationBarColor = Color(0x74000000)
+val TopNavigationBarColor = Color(0x00000000)
+
+
+

@@ -3,6 +3,7 @@ package com.example.truthordarejetpack
 import android.annotation.SuppressLint
 import android.content.Context
 import android.hardware.lights.Light
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
@@ -113,7 +114,7 @@ fun AddNewPlayers(
         topBar = {
             if (!isPagerOpen) {
                 @OptIn(ExperimentalMaterial3Api::class)
-                TopAppBar(
+                TopAppBar(modifier = Modifier.padding(top = 10.dp),
                     title = {
                         Text(
                             text = when (type) {
@@ -342,7 +343,7 @@ fun BottomSheetDialogContent(playersList: MutableList<String>, onDismiss: () -> 
 @Composable
 fun BottomBar(type: String, playersList: MutableList<String>, onPagerOpen: () -> Unit, navController: NavController){
 
-
+    val context = LocalContext.current
 
     Row(
         modifier = Modifier
@@ -474,8 +475,11 @@ fun BottomBar(type: String, playersList: MutableList<String>, onPagerOpen: () ->
             colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
             onClick = {
                 if (playersList.isNotEmpty()) {
-                    navController.navigate("pager/$type")}
+                    navController.navigate("pager/$type")
+                } else {
+                    Toast.makeText(context, "Пожалуйста, введите имена игроков", Toast.LENGTH_LONG).show()
                 }
+            }
 
 
         )

@@ -1,7 +1,6 @@
 package com.example.truthordarejetpack
 
 import android.view.animation.OvershootInterpolator
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
@@ -16,7 +15,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,10 +22,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -65,12 +62,10 @@ import com.example.truthordarejetpack.ui.theme.Green
 import com.example.truthordarejetpack.ui.theme.LightGray
 import com.example.truthordarejetpack.ui.theme.Orange
 import com.example.truthordarejetpack.ui.theme.Pink
-import com.example.truthordarejetpack.ui.theme.Red
 import com.example.truthordarejetpack.ui.theme.ShadowGreen
 import com.example.truthordarejetpack.ui.theme.ShadowViolet
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.Violet
-import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.delay
 import java.text.BreakIterator
 import java.text.StringCharacterIterator
@@ -132,13 +127,14 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
         ) {
 
             Row(
-                modifier = Modifier.fillMaxWidth().background(Transpar),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
-                IconButton(onClick = { onDismiss() }) {
+                IconButton(onClick = {  navController.popBackStack(route = "splash_screen_td/{type}/{modeType}", inclusive = true) }) {
                     Icon(
-                        modifier = Modifier.align(Alignment.CenterVertically).padding(start = 10.dp),
+                        modifier = Modifier.size(100.dp).align(Alignment.CenterVertically),
                         painter = painterResource(id = R.drawable.back_icon3),
                         tint = Color.White,
                         contentDescription = "Back"
@@ -147,9 +143,10 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
 
                 Text(
                     modifier = Modifier
-                        .offset(28.dp, 28.dp)
-                        .fillMaxHeight(0.15f)
-                        .fillMaxWidth(0.7f),
+                        //.offset(28.dp, 28.dp)
+                        //.fillMaxHeight(0.15f)
+                        //.fillMaxWidth()
+                    ,
                     text = randomPlayerName,
                     textAlign = TextAlign.Center,
                     style = TextStyle(
@@ -170,7 +167,7 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
                 }
 
                 Image(
-                    modifier = Modifier.graphicsLayer {
+                    modifier = Modifier.size(100.dp).graphicsLayer {
                         rotationY = rotation.value
                     },
                     painter = painterResource(id = modeIcon),

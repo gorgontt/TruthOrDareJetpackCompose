@@ -1,6 +1,7 @@
 package com.example.truthordarejetpack
 
 import android.os.Bundle
+import android.view.Window
 import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,9 +50,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.truthordarejetpack.ui.theme.DarkGray
 import com.example.truthordarejetpack.ui.theme.Gray
 import com.example.truthordarejetpack.ui.theme.Green
+import com.example.truthordarejetpack.ui.theme.NavigationBarColor
 import com.example.truthordarejetpack.ui.theme.ShadowGreen
+import com.example.truthordarejetpack.ui.theme.TopNavigationBarColor
 import com.example.truthordarejetpack.ui.theme.Transpar
 import com.example.truthordarejetpack.ui.theme.TruthOrDareJetpackTheme
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 
 
@@ -59,15 +65,30 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
             TruthOrDareJetpackTheme {
+
                 val brush = Brush.linearGradient(listOf(Gray, DarkGray))
                 Surface(modifier = Modifier.fillMaxSize().background(brush)) {
+                    MainContent()
                     Navigation()
                 }
 
             }
 
         }
+    }
+
+    @Composable
+    fun MainContent() {
+        val systemUiController = rememberSystemUiController()
+        systemUiController.setSystemBarsColor(TopNavigationBarColor)
+        systemUiController.setNavigationBarColor(NavigationBarColor)
+//        val systemUiController: SystemUiController = rememberSystemUiController()
+//
+//        systemUiController.isStatusBarVisible = false // Status bar
+//        systemUiController.isNavigationBarVisible = false // Navigation bar
+//        systemUiController.isSystemBarsVisible = false // Status & Navigation bars
     }
 
 
