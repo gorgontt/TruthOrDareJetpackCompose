@@ -1,6 +1,9 @@
 package com.example.truthordarejetpack
 
+import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -39,6 +42,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -275,7 +279,6 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
 fun Question(type: String?, modeType: String?, typeTD: String?, playerName: String?, navController: NavController){
 
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
-    //r boxVisible = remember { mutableStateOf(true) }
     var boxVisible by rememberSaveable { mutableStateOf(true)}
     val question = when {
         type == "пара" && typeTD == "правда" && modeType == "soft" -> CoupleSoftTruthList.random()
@@ -292,8 +295,10 @@ fun Question(type: String?, modeType: String?, typeTD: String?, playerName: Stri
 
         Column(modifier = Modifier.fillMaxSize().background(brush).padding(top = 30.dp)
             .clickable {
-                boxVisible = !boxVisible
-                //navController.navigate("splash_screen")
+                //boxVisible = !boxVisible
+                navController.popBackStack(route = "choose_truth_or_dare/{type}/{modeType}", inclusive = true)
+                //navigation.popBackStack(route = "DestinationC/{id}", inclusive = true)
+                //navController.navigate("splash_screen_td")
         }, horizontalAlignment = Alignment.CenterHorizontally)
 
         {
@@ -375,7 +380,6 @@ fun Question(type: String?, modeType: String?, typeTD: String?, playerName: Stri
                         Text(
                             modifier = Modifier.padding(15.dp),
                             text = substringText,
-                            //textAlign = TextAlign.Center,
                             style = TextStyle(
                                 color = Color.White, fontSize = 30.sp, fontFamily = FontFamily(
                                     Font(R.font.jura_semibold)
@@ -397,6 +401,81 @@ fun Question(type: String?, modeType: String?, typeTD: String?, playerName: Stri
 }
 
 
+@Composable
+fun SplashScreenTD(type: String?, modeType: String?, navController: NavController){
+
+    val brush = Brush.linearGradient(listOf(Gray, DarkGray))
+    Column(
+        modifier = Modifier.background(brush).fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.End
+    ) {
+
+        Column(
+            modifier = Modifier.background(Transpar).fillMaxWidth(),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Image(
+                modifier = Modifier.fillMaxWidth(0.7f),
+                painter = painterResource(id = R.drawable.splach_screen_stars_green_background),
+                contentDescription = null,
+
+                )
+        }
+
+
+        Column(
+            modifier = Modifier.background(Transpar).fillMaxWidth(),
+            horizontalAlignment = Alignment.End
+        ) {
+
+            Image(
+                modifier = Modifier.fillMaxWidth(0.7f),
+                painter = painterResource(id = R.drawable.splach_screen_stars_violet_background),
+                contentDescription = null,
+
+                )
+
+        }
+
+
+    }
+
+
+    val scale = remember {
+        Animatable(0f)
+    }
+
+
+    // Animation
+    LaunchedEffect(key1 = true) {
+        scale.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(
+                durationMillis = 1000,
+                easing = {
+                    OvershootInterpolator(4f).getInterpolation(it)
+                })
+        )
+        delay(1000L)
+        navController.navigate("choose_truth_or_dare/$type/$modeType")
+    }
+
+
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize().background(Transpar)
+    ) {
+        // Change the logo
+        Image(
+            painter = painterResource(id = R.drawable.truth_or_dare_splash_screen),
+            contentDescription = "Logo",
+            modifier = Modifier.scale(scale.value).fillMaxSize(0.6f)
+        )
+    }
+
+}
 
 
 

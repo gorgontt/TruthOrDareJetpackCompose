@@ -102,6 +102,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
+            composable("splash_screen_td/{type}/{modeType}") { backStackEntry ->
+
+                val type = backStackEntry.arguments?.getString("type")
+                val modeType = backStackEntry.arguments?.getString("modeType")
+                SplashScreenTD(type, modeType, navController)
+            }
+
             composable("choose_truth_or_dare/{type}/{modeType}") { backStackEntry ->
                 val type = backStackEntry.arguments?.getString("type")
                 val modeType = backStackEntry.arguments?.getString("modeType")
@@ -119,6 +126,8 @@ class MainActivity : ComponentActivity() {
 
                 Question(type = type, modeType = modeType, typeTD = typeTD, playerName = playerName, navController = navController)
             }
+
+
         }
     }
 

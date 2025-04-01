@@ -170,12 +170,6 @@ fun OnBoardingPager(
             horizontalAlignment = Alignment.CenterHorizontally) {
             HorizontalPager(state = pagerState) { page ->
 
-//                if (showTruthOrDare) {
-//                    ChooseTruthOrDare(playersList) {
-//                        showTruthOrDare = false
-//                    }
-//                } else {
-
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
@@ -250,19 +244,19 @@ fun OnBoardingPager(
                                 colors = ButtonDefaults.buttonColors(containerColor = Gray),
                                 onClick = {
                                     if (page == 0) {
-                                        navController.navigate("choose_truth_or_dare/$type/soft")
+                                        navController.navigate("splash_screen_td/$type/soft")
                                     }
 
                                     if (page == 1) {
-                                        navController.navigate("choose_truth_or_dare/$type/hot")
+                                        navController.navigate("splash_screen_td/$type/hot")
                                     }
 
                                     if (page == 2) {
-                                        navController.navigate("choose_truth_or_dare/$type/hard")
+                                        navController.navigate("splash_screen_td/$type/hard")
                                     }
 
                                     if (page == 3) {
-                                        navController.navigate("choose_truth_or_dare/$type/extreme")
+                                        navController.navigate("splash_screen_td/$type/extreme")
                                     }
 
                                 }
