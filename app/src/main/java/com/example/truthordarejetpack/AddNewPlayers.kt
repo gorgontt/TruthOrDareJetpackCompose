@@ -3,6 +3,7 @@ package com.example.truthordarejetpack
 import android.annotation.SuppressLint
 import android.content.Context
 import android.hardware.lights.Light
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -129,8 +130,9 @@ fun AddNewPlayers(
                     },
                     navigationIcon = {
                         IconButton(onClick = { navController.popBackStack(route = "players_list/{type}", inclusive = true) }) {
-                            Icon(painter = painterResource(id = R.drawable.back_icon2), contentDescription = "Меню")
+                            Icon(painter = painterResource(id = R.drawable.back_icon3), contentDescription = "Меню")
                         }
+
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Transpar,
@@ -217,10 +219,12 @@ fun BottomSheetDialogContent(playersList: MutableList<String>, onDismiss: () -> 
                     color = Green,
                     shape = RoundedCornerShape(37.dp)
                 )
-                .shadow(elevation = 10.dp,
+                .shadow(
+                    elevation = 10.dp,
                     ambientColor = Color.Black,
                     spotColor = Color.Black,
-                    shape = RoundedCornerShape(37.dp))
+                    shape = RoundedCornerShape(37.dp)
+                )
                 .innerShadow(
                     shape = RoundedCornerShape(40.dp, 50.dp, 37.dp, 50.dp), color = ShadowGreen,
                     offsetY = (-8).dp, offsetX = (-6).dp
@@ -235,7 +239,7 @@ fun BottomSheetDialogContent(playersList: MutableList<String>, onDismiss: () -> 
             leadingIcon = {
                 Icon(
                     modifier = Modifier.padding(start = 5.dp),
-                    painter = painterResource(R.drawable.user_icon),
+                    painter = painterResource(R.drawable.user_icon1),
                     contentDescription = "",
                     tint = DarkGreen
                 )
@@ -256,66 +260,73 @@ fun BottomSheetDialogContent(playersList: MutableList<String>, onDismiss: () -> 
 
         )
 
-        Column(
-
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.6f)
-                .padding(end = 30.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.End
-        ) {
+        val buttonVisible = text.isNotBlank()
+        AnimatedVisibility(visible = buttonVisible) {
 
 
-            Button (
+            Column(
+
                 modifier = Modifier
-                    .shadow(
-                        elevation = 5.dp,
-                        ambientColor = Color.Black,
-                        spotColor = Color.Black,
-                        shape = RoundedCornerShape(18.dp)
-                    )
-                    .animatedBorder(
-                        borderColors = listOf(Pink, Violet, Green),
-                        backgroundColor = Gray,
-                        shape = RoundedCornerShape(16.dp),
-                        borderWidth = 4.dp
-                    )
-                    .innerShadow(
-                        shape = RoundedCornerShape(18.dp), color = Violet,
-                        offsetY = (-1).dp, offsetX = (-1).dp
-                    )
-                    // Top left corner shadow.
-                    .innerShadow(
-                        shape = RoundedCornerShape(18.dp), color = LightPink,
-                        offsetY = 4.dp, offsetX = 1.dp
-                    ),
-                shape = RoundedCornerShape(18.dp),
-                colors = ButtonDefaults.buttonColors(Violet),
-                onClick = {
-                    if (text.isNotBlank()) {
-                        playersList.add(text) // Добавляем нового игрока
-                        text = ""
-                        savePlayers(context, playersList = playersList) // Сохраняем изменения в SharedPreferences
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.6f)
+                    .padding(end = 30.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.End
+            ) {
+
+
+                Button (
+                    modifier = Modifier
+                        .shadow(
+                            elevation = 5.dp,
+                            ambientColor = Color.Black,
+                            spotColor = Color.Black,
+                            shape = RoundedCornerShape(18.dp)
+                        )
+                        .animatedBorder(
+                            borderColors = listOf(Pink, Violet, Green),
+                            backgroundColor = Gray,
+                            shape = RoundedCornerShape(16.dp),
+                            borderWidth = 4.dp
+                        )
+                        .innerShadow(
+                            shape = RoundedCornerShape(18.dp), color = Violet,
+                            offsetY = (-1).dp, offsetX = (-1).dp
+                        )
+                        // Top left corner shadow.
+                        .innerShadow(
+                            shape = RoundedCornerShape(18.dp), color = LightPink,
+                            offsetY = 4.dp, offsetX = 1.dp
+                        ),
+                    shape = RoundedCornerShape(18.dp),
+                    colors = ButtonDefaults.buttonColors(Violet),
+                    onClick = {
+                        if (text.isNotBlank()) {
+                            playersList.add(text) // Добавляем нового игрока
+                            text = ""
+                            savePlayers(context, playersList = playersList) // Сохраняем изменения в SharedPreferences
+                        }
+
+                        onDismiss()
+
                     }
-
-                    onDismiss()
-
-                }
-            )
-            {
-                Text(
-                    modifier = Modifier.padding(top = 5.dp, bottom = 5.dp),
-                    text = "Ok",
-                    style = TextStyle(
-                        color = DarkGray,
-                        fontSize = 30.sp,
-                        fontFamily = FontFamily(Font(R.font.jura_semibold))
-                    )
                 )
+                {
+                    Text(
+                        modifier = Modifier.padding(top = 5.dp, bottom = 5.dp),
+                        text = "Ok",
+                        style = TextStyle(
+                            color = DarkGray,
+                            fontSize = 30.sp,
+                            fontFamily = FontFamily(Font(R.font.jura_semibold))
+                        )
+                    )
+                }
             }
-        }
 
+
+
+        }
 
     }
 
@@ -427,26 +438,31 @@ fun BottomBar(type: String, playersList: MutableList<String>, onPagerOpen: () ->
 
         Spacer(modifier = Modifier.width(8.dp))
 
+        val buttonColor = if (playersList.isNotEmpty()) Violet else Gray
         Button(
             modifier = Modifier
                 .size(height = 70.dp, width = 500.dp)
                 .padding(0.dp)
-                .animatedBorder(
-                    borderColors = listOf(Pink, Violet, Green),
-                    backgroundColor = Gray,
-                    shape = RoundedCornerShape(16.dp),
-                    borderWidth = 4.dp
-                )
+                .let {
+                    if (playersList.isNotEmpty()) {
+                        it.animatedBorder(
+                            borderColors = listOf(Pink, Violet, Green),
+                            backgroundColor = Gray,
+                            shape = RoundedCornerShape(18.dp),
+                            borderWidth = 4.dp
+                        )
+                    } else it
+                }
                 .fillMaxHeight(0.85f)
                 .fillMaxWidth(0.95f)
                 .shadow(
                     elevation = 10.dp,
                     ambientColor = Pink,
                     spotColor = Pink,
-                    shape = RoundedCornerShape(15.dp)
+                    shape = RoundedCornerShape(16.dp)
                 )
                 .innerShadow(
-                    shape = RoundedCornerShape(15.dp), color = Violet,
+                    shape = RoundedCornerShape(16.dp), color = Violet,
                     offsetY = (-4).dp, offsetX = (-4).dp
                 )
                 // Top left corner shadow.
@@ -454,9 +470,13 @@ fun BottomBar(type: String, playersList: MutableList<String>, onPagerOpen: () ->
                     shape = RoundedCornerShape(15.dp), color = LightPink,
                     offsetY = 4.dp, offsetX = 4.dp
                 ),
-            shape = RoundedCornerShape(15.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Violet),
-            onClick = {navController.navigate("pager/$type")}
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
+            onClick = {
+                if (playersList.isNotEmpty()) {
+                    navController.navigate("pager/$type")}
+                }
+
 
         )
         {

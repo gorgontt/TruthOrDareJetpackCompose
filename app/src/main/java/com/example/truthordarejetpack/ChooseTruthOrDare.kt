@@ -46,6 +46,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -87,6 +88,35 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
         "Нет игроков"
     }
 
+    val scale = remember {
+        Animatable(0f)
+    }
+
+    val modeIcon = when (modeType) {
+        "soft" -> R.drawable.suit_green
+        "hot" -> R.drawable.suit_orange
+        "hard" -> R.drawable.suit_red
+        "extreme" -> R.drawable.suit_pink
+        else -> R.drawable.suit_green // Предположим, что у вас есть стандартное изображение
+    }
+
+
+
+    // Animation
+    LaunchedEffect(key1 = true) {
+        scale.animateTo(
+            targetValue = 1f,
+            // tween Animation
+            animationSpec = tween(
+                durationMillis = 1000,
+                easing = {
+                    OvershootInterpolator(1f).getInterpolation(it)
+                })
+        )
+        // Customize the delay time
+        delay(1000L)
+    }
+
 
     Box(
         modifier = Modifier
@@ -109,7 +139,7 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
                 IconButton(onClick = { onDismiss() }) {
                     Icon(
                         modifier = Modifier.align(Alignment.CenterVertically).padding(start = 10.dp),
-                        painter = painterResource(id = R.drawable.arrow_back),
+                        painter = painterResource(id = R.drawable.back_icon3),
                         tint = Color.White,
                         contentDescription = "Back"
                     )
@@ -128,11 +158,30 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
                         )
                     )
                 )
+
+                var animated by remember { mutableStateOf(true) }
+                val rotation = remember { Animatable(initialValue = 360f) }
+
+                LaunchedEffect(animated) {
+                    rotation.animateTo(
+                        targetValue = if (animated) 0f else 360f,
+                        animationSpec = tween(durationMillis = 1500),
+                    )
+                }
+
+                Image(
+                    modifier = Modifier.graphicsLayer {
+                        rotationY = rotation.value
+                    },
+                    painter = painterResource(id = modeIcon),
+                    contentDescription = "",
+                )
             }
 
 
             Card(
                 modifier = Modifier
+                    .scale(scale.value)
                     .border(
                         width = 2.dp,
                         color = Green,
@@ -199,10 +248,26 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
                     )
                 }
             }
+//
+//            Text(
+//                modifier = Modifier
+//                    .padding(28.dp, 28.dp)
+//                    //.offset(28.dp, 28.dp)
+//                    .fillMaxHeight(0.15f)
+//                    .fillMaxWidth(0.7f),
+//                text = randomPlayerName,
+//                textAlign = TextAlign.Center,
+//                style = TextStyle(
+//                    color = Color.White, fontSize = 40.sp, fontFamily = FontFamily(
+//                        Font(R.font.jura_semibold)
+//                    )
+//                )
+//            )
 
             Card(
                 modifier = Modifier
                     .align(alignment = Alignment.End)
+                    .scale(scale.value)
                     .border(
                         width = 2.dp,
                         color = Violet,
@@ -406,36 +471,28 @@ fun SplashScreenTD(type: String?, modeType: String?, navController: NavControlle
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
     Column(
         modifier = Modifier.background(brush).fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.End
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Column(
-            modifier = Modifier.background(Transpar).fillMaxWidth(),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Image(
-                modifier = Modifier.fillMaxWidth(0.7f),
-                painter = painterResource(id = R.drawable.splach_screen_stars_green_background),
-                contentDescription = null,
+        //val brush = Brush.linearGradient(listOf(Gray, DarkGray))
+        var animated by remember { mutableStateOf(true) }
+        val rotation = remember { Animatable(initialValue = 360f) }
 
-                )
+        LaunchedEffect(animated) {
+            rotation.animateTo(
+                targetValue = if (animated) 0f else 360f,
+                animationSpec = tween(durationMillis = 1500),
+            )
         }
 
-
-        Column(
-            modifier = Modifier.background(Transpar).fillMaxWidth(),
-            horizontalAlignment = Alignment.End
-        ) {
-
-            Image(
-                modifier = Modifier.fillMaxWidth(0.7f),
-                painter = painterResource(id = R.drawable.splach_screen_stars_violet_background),
-                contentDescription = null,
-
-                )
-
-        }
+        Image(
+            modifier = Modifier.graphicsLayer {
+                rotationY = rotation.value
+            },
+            painter = painterResource(id = R.drawable.suit_pink),
+            contentDescription = "",
+        )
 
 
     }
@@ -461,18 +518,6 @@ fun SplashScreenTD(type: String?, modeType: String?, navController: NavControlle
     }
 
 
-
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize().background(Transpar)
-    ) {
-        // Change the logo
-        Image(
-            painter = painterResource(id = R.drawable.truth_or_dare_splash_screen),
-            contentDescription = "Logo",
-            modifier = Modifier.scale(scale.value).fillMaxSize(0.6f)
-        )
-    }
 
 }
 
