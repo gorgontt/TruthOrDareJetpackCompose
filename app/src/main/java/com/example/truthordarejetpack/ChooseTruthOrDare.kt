@@ -52,9 +52,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.truthordarejetpack.companylists.CompanyExtremeDareList
+import com.example.truthordarejetpack.companylists.CompanyExtremeTruthList
+import com.example.truthordarejetpack.companylists.CompanyHardDareList
+import com.example.truthordarejetpack.companylists.CompanyHardTruthList
+import com.example.truthordarejetpack.companylists.CompanyHotDareList
+import com.example.truthordarejetpack.companylists.CompanyHotTruthList
+import com.example.truthordarejetpack.companylists.CompanySoftDareList
+import com.example.truthordarejetpack.companylists.CompanySoftTruthList
+import com.example.truthordarejetpack.couplelists.CoupleExtremeDareList
 import com.example.truthordarejetpack.couplelists.CoupleExtremeTruthList
+import com.example.truthordarejetpack.couplelists.CoupleHardDareList
 import com.example.truthordarejetpack.couplelists.CoupleHardTruthList
+import com.example.truthordarejetpack.couplelists.CoupleHotDareList
 import com.example.truthordarejetpack.couplelists.CoupleHotTruthList
+import com.example.truthordarejetpack.couplelists.CoupleSoftDareList
 import com.example.truthordarejetpack.couplelists.CoupleSoftTruthList
 import com.example.truthordarejetpack.ui.theme.DarkGray
 import com.example.truthordarejetpack.ui.theme.Gray
@@ -95,7 +107,15 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
         else -> R.drawable.suit_green // Предположим, что у вас есть стандартное изображение
     }
 
+    var animated by remember { mutableStateOf(true) }
+    val rotation = remember { Animatable(initialValue = 360f) }
 
+    LaunchedEffect(animated) {
+        rotation.animateTo(
+            targetValue = if (animated) 0f else 360f,
+            animationSpec = tween(durationMillis = 1500),
+        )
+    }
 
     // Animation
     LaunchedEffect(key1 = true) {
@@ -129,10 +149,14 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.Start
             ) {
 
-                IconButton(onClick = {  navController.popBackStack(route = "splash_screen_td/{type}/{modeType}", inclusive = true) }) {
+                IconButton(
+                    modifier = Modifier
+                        .fillMaxWidth(0.2f)
+                    ,
+                    onClick = {  navController.popBackStack(route = "splash_screen_td/{type}/{modeType}", inclusive = true) }) {
                     Icon(
                         modifier = Modifier.size(100.dp).align(Alignment.CenterVertically),
                         painter = painterResource(id = R.drawable.back_icon3),
@@ -145,7 +169,7 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
                     modifier = Modifier
                         //.offset(28.dp, 28.dp)
                         //.fillMaxHeight(0.15f)
-                        //.fillMaxWidth()
+                        .fillMaxWidth(0.8f)
                     ,
                     text = randomPlayerName,
                     textAlign = TextAlign.Center,
@@ -156,23 +180,15 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
                     )
                 )
 
-                var animated by remember { mutableStateOf(true) }
-                val rotation = remember { Animatable(initialValue = 360f) }
 
-                LaunchedEffect(animated) {
-                    rotation.animateTo(
-                        targetValue = if (animated) 0f else 360f,
-                        animationSpec = tween(durationMillis = 1500),
-                    )
-                }
 
-                Image(
-                    modifier = Modifier.size(100.dp).graphicsLayer {
-                        rotationY = rotation.value
-                    },
-                    painter = painterResource(id = modeIcon),
-                    contentDescription = "",
-                )
+//                Image(
+//                    modifier = Modifier.size(100.dp).graphicsLayer {
+//                        rotationY = rotation.value
+//                    },
+//                    painter = painterResource(id = modeIcon),
+//                    contentDescription = "",
+//                )
             }
 
 
@@ -223,14 +239,18 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
 
                     Image(
                         modifier = Modifier
+                            .graphicsLayer {
+                                rotationY = rotation.value
+                            }
                             .align(Alignment.TopEnd)
                             .padding(20.dp)
-                            .animatedBorder(
-                                borderColors = listOf(Orange, Green),
-                                backgroundColor = Gray,
-                                shape = RoundedCornerShape(30.dp),
-                                borderWidth = 4.dp
-                            ),
+//                            .animatedBorder(
+//                                borderColors = listOf(Orange, Green),
+//                                backgroundColor = Gray,
+//                                shape = RoundedCornerShape(30.dp),
+//                                borderWidth = 4.dp
+//                            ),
+                                ,
                         painter = painterResource(id = R.drawable.truth_icon),
                         contentDescription = "TruthIcon"
                     )
@@ -309,14 +329,18 @@ fun ChooseTruthOrDare(type: String?, modeType: String?, playersList: List<String
 
                     Image(
                         modifier = Modifier
+                            .graphicsLayer {
+                                rotationY = rotation.value
+                            }
                             .align(Alignment.TopStart)
                             .padding(20.dp)
-                            .animatedBorder(
-                                borderColors = listOf(Pink, Violet),
-                                backgroundColor = Gray,
-                                shape = RoundedCornerShape(30.dp),
-                                borderWidth = 4.dp
-                            ),
+//                            .animatedBorder(
+//                                borderColors = listOf(Pink, Violet),
+//                                backgroundColor = Gray,
+//                                shape = RoundedCornerShape(30.dp),
+//                                borderWidth = 4.dp
+//                            ),
+                                ,
                         painter = painterResource(id = R.drawable.dare_icon),
                         contentDescription = "DareIcon"
                     )
@@ -347,6 +371,25 @@ fun Question(type: String?, modeType: String?, typeTD: String?, playerName: Stri
         type == "пара" && typeTD == "правда" && modeType == "hot" -> CoupleHotTruthList.random()
         type == "пара" && typeTD == "правда" && modeType == "hard" -> CoupleHardTruthList.random()
         type == "пара" && typeTD == "правда" && modeType == "extreme" -> CoupleExtremeTruthList.random()
+
+
+        type == "пара" && typeTD == "действие" && modeType == "soft" -> CoupleSoftDareList.random()
+        type == "пара" && typeTD == "действие" && modeType == "hot" -> CoupleHotDareList.random()
+        type == "пара" && typeTD == "действие" && modeType == "hard" -> CoupleHardDareList.random()
+        type == "пара" && typeTD == "действие" && modeType == "extreme" -> CoupleExtremeDareList.random()
+
+
+        type == "компания" && typeTD == "правда" && modeType == "soft" -> CompanySoftTruthList.random()
+        type == "компания" && typeTD == "правда" && modeType == "hot" -> CompanyHotTruthList.random()
+        type == "компания" && typeTD == "правда" && modeType == "hard" -> CompanyHardTruthList.random()
+        type == "компания" && typeTD == "правда" && modeType == "extreme" -> CompanyExtremeTruthList.random()
+
+
+        type == "компания" && typeTD == "действие" && modeType == "soft" -> CompanySoftDareList.random()
+        type == "компания" && typeTD == "действие" && modeType == "hot" -> CompanyHotDareList.random()
+        type == "компания" && typeTD == "действие" && modeType == "hard" -> CompanyHardDareList.random()
+        type == "компания" && typeTD == "действие" && modeType == "extreme" -> CompanyExtremeDareList.random()
+
         else -> "Неизвестный вопрос"
     }
 
@@ -422,13 +465,13 @@ fun Question(type: String?, modeType: String?, typeTD: String?, playerName: Stri
                         val text ="$playerName, $question"
                         val breakIterator = remember(text) { BreakIterator.getCharacterInstance() }
 
-                        val typingDelayInMs = 50L
+                        val typingDelayInMs = 20L
 
                         var substringText by remember {
                             mutableStateOf("")
                         }
                         LaunchedEffect(text) {
-                            delay(500)
+                            delay(300)
                             breakIterator.text = StringCharacterIterator(text)
 
                             var nextIndex = breakIterator.next()
@@ -466,6 +509,15 @@ fun Question(type: String?, modeType: String?, typeTD: String?, playerName: Stri
 fun SplashScreenTD(type: String?, modeType: String?, navController: NavController){
 
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
+
+    val modeIcon = when (modeType) {
+        "soft" -> R.drawable.suit_green
+        "hot" -> R.drawable.suit_orange
+        "hard" -> R.drawable.suit_red
+        "extreme" -> R.drawable.suit_pink
+        else -> R.drawable.suit_green // Предположим, что у вас есть стандартное изображение
+    }
+
     Column(
         modifier = Modifier.background(brush).fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -484,10 +536,10 @@ fun SplashScreenTD(type: String?, modeType: String?, navController: NavControlle
         }
 
         Image(
-            modifier = Modifier.graphicsLayer {
+            modifier = Modifier.fillMaxSize(0.8f).graphicsLayer {
                 rotationY = rotation.value
             },
-            painter = painterResource(id = R.drawable.suit_pink),
+            painter = painterResource(id = modeIcon),
             contentDescription = "",
         )
 

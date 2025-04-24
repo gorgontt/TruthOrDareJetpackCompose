@@ -37,6 +37,8 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
+import androidx.compose.material.Switch
+import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.BottomAppBar
@@ -149,6 +151,7 @@ fun AddNewPlayers(
             if (!isPagerOpen) {
                 BottomAppBar(
                     containerColor = Transpar,
+                    modifier = Modifier.height(200.dp),
                     contentColor = Transpar
                 ) {
                     BottomBar(type, playersList, onPagerOpen = { isPagerOpen = true }, navController)
@@ -345,161 +348,193 @@ fun BottomBar(type: String, playersList: MutableList<String>, onPagerOpen: () ->
 
     val context = LocalContext.current
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
-            .background(
-                Transpar
-            ),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
 
-        Card(
+    Column(modifier = Modifier.background(Transpar).fillMaxSize()) {
 
-            modifier = Modifier
-                .background(Transpar)
-                .shadow(
-                    elevation = 5.dp,
-                    ambientColor = Color.Black,
-                    spotColor = Color.Black,
-                    shape = RoundedCornerShape(10.dp)
-                )
-
-
-        )
-
-        {
-
-            Surface(
-                modifier = Modifier.background(DarkGray)
-
-            ) {
-                val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
-                var isSheetOpen by rememberSaveable {
-                    mutableStateOf(false)
-                }
-
-
-
-                Button(
-                    onClick = {
-                        isSheetOpen = true
-
-                    },
-                    shape = RoundedCornerShape(15.dp),
-                    modifier = Modifier
-                        .size(height = 70.dp, width = 60.dp)
-                        .background(Gray)
-//                        .animatedBorder(
-//                            borderColors = listOf(Color.Red, Color.Green, Color.Blue),
-//                            backgroundColor = Gray,
-//                            shape = RoundedCornerShape(16.dp),
-//                            borderWidth = 4.dp
-//                        )
-                        .innerShadow(
-                            shape = RoundedCornerShape(15.dp), color = Color.Black,
-                            offsetY = (-0).dp, offsetX = (-0).dp
-                        )
-                        // Top left corner shadow.
-                        .innerShadow(
-                            shape = RoundedCornerShape(15.dp), color = Color.LightGray,
-                            offsetY = 2.dp, offsetX = 0.dp
-                        ),
-                    colors = ButtonDefaults.buttonColors(containerColor = Gray),
-                    contentPadding = PaddingValues(1.dp)
-                ) {
-
-                    Icon(
-                        painter = painterResource(id = R.drawable.add),
-                        tint = Green,
-                        contentDescription = "Add",
-                        modifier = Modifier.size(30.dp)
+        val checkedState = remember { mutableStateOf(false) }
+        val textColor = remember { mutableStateOf(Color.White) }
+        Row(modifier = Modifier.fillMaxWidth().background(DarkGray), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+            Text(text = "Случайный выбор игрока",
+                style = TextStyle(
+                    color = textColor.value, fontSize = 22.sp, fontFamily = FontFamily(
+                        Font(R.font.juraa)
                     )
+                ))
+
+
+            Switch(
+                checked = checkedState.value,
+                onCheckedChange = {
+                    checkedState.value = it
+                    if(checkedState.value) textColor.value = Green
+                    else textColor.value = Color.White
+                },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Green,
+                    checkedTrackColor = Color(0xFF3F4142),
+                    uncheckedThumbColor = Color.White,
+                    uncheckedTrackColor = Color(0xFFFFEBEE)
+                )
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
+                .background(
+                    Transpar
+                ),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Card(
+
+                modifier = Modifier
+                    .background(Transpar)
+                    .shadow(
+                        elevation = 5.dp,
+                        ambientColor = Color.Black,
+                        spotColor = Color.Black,
+                        shape = RoundedCornerShape(10.dp)
+                    )
+
+
+            )
+
+            {
+
+                Surface(
+                    modifier = Modifier.background(DarkGray)
+
+                ) {
+                    val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
+                    var isSheetOpen by rememberSaveable {
+                        mutableStateOf(false)
+                    }
+
+
+
+                    Button(
+                        onClick = {
+                            isSheetOpen = true
+
+                        },
+                        shape = RoundedCornerShape(15.dp),
+                        modifier = Modifier
+                            .size(height = 60.dp, width = 60.dp)
+                            .background(Gray)
+                            .innerShadow(
+                                shape = RoundedCornerShape(15.dp), color = Color.Black,
+                                offsetY = (-0).dp, offsetX = (-0).dp
+                            )
+                            // Top left corner shadow.
+                            .innerShadow(
+                                shape = RoundedCornerShape(15.dp), color = Color.LightGray,
+                                offsetY = 2.dp, offsetX = 0.dp
+                            ),
+                        colors = ButtonDefaults.buttonColors(containerColor = Gray),
+                        contentPadding = PaddingValues(1.dp)
+                    ) {
+
+                        Icon(
+                            painter = painterResource(id = R.drawable.add),
+                            tint = Green,
+                            contentDescription = "Add",
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+
+                    if (isSheetOpen) {
+                        ModalBottomSheet(
+                            containerColor = Gray,
+                            sheetState = sheetState,
+                            onDismissRequest = { isSheetOpen = false }
+                        ) {
+                            BottomSheetDialogContent(playersList) {
+                                isSheetOpen = false
+                            }
+                        }
+                    }
+
+
                 }
 
-                if (isSheetOpen) {
-                    ModalBottomSheet(
-                        containerColor = Gray,
-                        sheetState = sheetState,
-                        onDismissRequest = { isSheetOpen = false }
-                    ) {
-                        BottomSheetDialogContent(playersList) {
-                            isSheetOpen = false
-                        }
+
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            val buttonColor = if (playersList.isNotEmpty()) Violet else Gray
+            Button(
+                modifier = Modifier
+                    .size(height = 60.dp, width = 500.dp)
+                    .padding(0.dp)
+                    .let {
+                        if (playersList.isNotEmpty()) {
+                            it.animatedBorder(
+                                borderColors = listOf(Pink, Violet, Green),
+                                backgroundColor = Gray,
+                                shape = RoundedCornerShape(18.dp),
+                                borderWidth = 4.dp
+                            )
+                        } else it
+                    }
+                    .fillMaxHeight(0.85f)
+                    .fillMaxWidth(0.95f)
+                    .shadow(
+                        elevation = 10.dp,
+                        ambientColor = Pink,
+                        spotColor = Pink,
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .innerShadow(
+                        shape = RoundedCornerShape(16.dp), color = Violet,
+                        offsetY = (-4).dp, offsetX = (-4).dp
+                    )
+                    // Top left corner shadow.
+                    .innerShadow(
+                        shape = RoundedCornerShape(15.dp), color = LightPink,
+                        offsetY = 4.dp, offsetX = 4.dp
+                    ),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
+                onClick = {
+                    if (playersList.isNotEmpty()) {
+                        navController.navigate("pager/$type")
+                    } else {
+                        Toast.makeText(context, "Пожалуйста, введите имена игроков", Toast.LENGTH_LONG).show()
                     }
                 }
 
 
-            }
-
-
-        }
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        val buttonColor = if (playersList.isNotEmpty()) Violet else Gray
-        Button(
-            modifier = Modifier
-                .size(height = 70.dp, width = 500.dp)
-                .padding(0.dp)
-                .let {
-                    if (playersList.isNotEmpty()) {
-                        it.animatedBorder(
-                            borderColors = listOf(Pink, Violet, Green),
-                            backgroundColor = Gray,
-                            shape = RoundedCornerShape(18.dp),
-                            borderWidth = 4.dp
-                        )
-                    } else it
-                }
-                .fillMaxHeight(0.85f)
-                .fillMaxWidth(0.95f)
-                .shadow(
-                    elevation = 10.dp,
-                    ambientColor = Pink,
-                    spotColor = Pink,
-                    shape = RoundedCornerShape(16.dp)
-                )
-                .innerShadow(
-                    shape = RoundedCornerShape(16.dp), color = Violet,
-                    offsetY = (-4).dp, offsetX = (-4).dp
-                )
-                // Top left corner shadow.
-                .innerShadow(
-                    shape = RoundedCornerShape(15.dp), color = LightPink,
-                    offsetY = 4.dp, offsetX = 4.dp
-                ),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
-            onClick = {
-                if (playersList.isNotEmpty()) {
-                    navController.navigate("pager/$type")
-                } else {
-                    Toast.makeText(context, "Пожалуйста, введите имена игроков", Toast.LENGTH_LONG).show()
-                }
-            }
-
-
-        )
-        {
-
-            Text(
-                "Начать",
-                modifier = Modifier.background(Transpar),
-                style = TextStyle(
-                    color = DarkGray,
-                    fontSize = 26.sp,
-                    fontFamily = FontFamily(Font(R.font.jura_semibold))
-                )
             )
+            {
+
+                Text(
+                    "Начать",
+                    modifier = Modifier.background(Transpar),
+                    style = TextStyle(
+                        color = DarkGray,
+                        fontSize = 26.sp,
+                        fontFamily = FontFamily(Font(R.font.jura_semibold))
+                    )
+                )
+
+
+            }
 
 
         }
-
-
     }
+
+
+
+
+
 }
 
 
@@ -508,89 +543,99 @@ fun BottomBar(type: String, playersList: MutableList<String>, onPagerOpen: () ->
 fun PlayersList(playersList: MutableList<String>, onPlayerDelete: (String) -> Unit) {
     val brush = Brush.linearGradient(listOf(Gray, DarkGray))
     //val scrollState = rememberScrollState()
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth()
-            .background(brush)
-            //.verticalScroll(scrollState)
-            .offset(0.dp, 120.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        items(items = playersList) { playerName ->
+
+    Column(modifier = Modifier
+        .fillMaxHeight()
+        .fillMaxWidth()
+        .background(DarkGray)) {
 
 
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .padding(start = 0.dp, end = 0.dp, top = 15.dp)
-                    .border(
-                        width = 2.dp,
-                        color = Green,
-                        shape = RoundedCornerShape(37.dp)
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxHeight(0.7f)
+                .fillMaxWidth()
+                .background(DarkGray)
+                //.verticalScroll(scrollState)
+                .offset(0.dp, 120.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            items(items = playersList) { playerName ->
 
-                    )
 
-//                    .animatedBorder(
-//                        borderColors = listOf(Green, Orange, Pink, Color.Yellow),
-//                        backgroundColor = Color.White,
-//                        shape = RoundedCornerShape(37.dp),
-//                        borderWidth = 4.dp
-//                    )
-                    .background(Transpar)
-                    .shadow(
-                        elevation = 10.dp,
-                        ambientColor = Color.Black,
-                        spotColor = Color.Black,
-                        shape = RoundedCornerShape(37.dp)
-                    )
 
-                    .innerShadow(
-                        shape = RoundedCornerShape(40.dp, 50.dp, 37.dp, 50.dp), color = ShadowGreen,
-                        offsetY = (-4).dp, offsetX = (-4).dp
-                    )
 
-                    // Top left corner shadow.
-                    .innerShadow(
-                        shape = RoundedCornerShape(40.dp, 50.dp, 37.dp, 50.dp), color = ShadowGreen,
-                        offsetY = 4.dp, offsetX = 4.dp
-                    ),
-                shape = RoundedCornerShape(37.dp)
-            ) {
-
-                Box(
-                    contentAlignment = Alignment.Center,
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(Gray)
+                        .fillMaxWidth(0.8f)
+                        .padding(start = 0.dp, end = 0.dp, top = 15.dp)
+                        .border(
+                            width = 2.dp,
+                            color = Green,
+                            shape = RoundedCornerShape(37.dp)
+
+                        )
+                        .background(Transpar)
+                        .shadow(
+                            elevation = 10.dp,
+                            ambientColor = Color.Black,
+                            spotColor = Color.Black,
+                            shape = RoundedCornerShape(37.dp)
+                        )
+
+                        .innerShadow(
+                            shape = RoundedCornerShape(40.dp, 50.dp, 37.dp, 50.dp), color = ShadowGreen,
+                            offsetY = (-4).dp, offsetX = (-4).dp
+                        )
+
+                        // Top left corner shadow.
+                        .innerShadow(
+                            shape = RoundedCornerShape(40.dp, 50.dp, 37.dp, 50.dp), color = ShadowGreen,
+                            offsetY = 4.dp, offsetX = 4.dp
+                        ),
+                    shape = RoundedCornerShape(37.dp)
                 ) {
 
-                    Icon(
+                    Box(
+                        contentAlignment = Alignment.Center,
                         modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .offset(-20.dp, 0.dp)
-                            .clickable {
-                                onPlayerDelete(playerName)
-                            },
-                        painter = painterResource(R.drawable.delete_icon),
-                        contentDescription = "Delete",
-                        tint = Green
-                    )
+                            .fillMaxSize()
+                            .background(Gray)
+                    ) {
 
-                    Text(
-                        modifier = Modifier.padding(15.dp),
-                        text = playerName,
-                        style = TextStyle(
-                            color = Green, fontSize = 28.sp, fontFamily = FontFamily(
-                                Font(R.font.jura_semibold)
+                        Icon(
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                                .offset(-20.dp, 0.dp)
+                                .clickable {
+                                    onPlayerDelete(playerName)
+                                },
+                            painter = painterResource(R.drawable.delete_icon),
+                            contentDescription = "Delete",
+                            tint = Green
+                        )
+
+                        Text(
+                            modifier = Modifier.padding(15.dp),
+                            text = playerName,
+                            style = TextStyle(
+                                color = Green, fontSize = 28.sp, fontFamily = FontFamily(
+                                    Font(R.font.jura_semibold)
+                                )
                             )
                         )
-                    )
-                }
+                    }
 
+                }
             }
         }
+
+
+
+
+
     }
+
+
 }
 
 
